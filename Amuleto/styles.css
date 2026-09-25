@@ -10,11 +10,7 @@
 
 html, body {
 	background-image: url('bg.jpg');
-	background:
-		radial-gradient(circle at 20% 0%, rgba(174,235,255,.15), transparent 40%),
-		radial-gradient(circle at 80% 10%, rgba(95,201,232,.12), transparent 45%),
-		linear-gradient(180deg, #0a1930, var(--oscuro) 60%, #081324) !important;
-	color: #eaf8ff;
+	background-repeat: repeat;
 }
 
 body, tr, input {
