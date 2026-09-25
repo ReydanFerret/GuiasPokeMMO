@@ -7,6 +7,8 @@
   --hielo: #AEEBFF;
   --hieloOscuro: #5FC9E8;
   --texto: #eaf8ff;
+  --textoFuerte: #f4fbff;
+  --textoSuave: #d9f3ff;
 }
 
 * {
@@ -20,11 +22,13 @@ html, body {
 
 body {
   min-height: 100vh;
+  background-color: var(--oscuro);
   background-image: url('bg.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   background-attachment: fixed;
+  background-blend-mode: multiply;
   font-family: 'Press Start 2P', monospace;
   color: var(--texto);
   padding: 24px 12px 60px;
@@ -50,8 +54,8 @@ body {
 }
 
 h1 {
-  color: var(--hielo);
-  text-shadow: 3px 3px 0 var(--hieloOscuro), -1px -1px 0 #000, 0 0 12px rgba(174, 235, 255, 0.5);
+  color: var(--textoFuerte);
+  text-shadow: 3px 3px 0 var(--hieloOscuro), -1px -1px 0 #000, 0 0 12px rgba(174, 235, 255, 0.6);
   font-size: clamp(16px, 4vw, 26px);
   text-align: center;
   margin: 0 0 6px;
@@ -76,7 +80,8 @@ h1 {
 }
 
 h2 {
-  color: var(--hielo);
+  color: var(--textoFuerte);
+  text-shadow: 2px 2px 0 #112b47, -1px -1px 0 rgba(0,0,0,.7), 0 0 12px rgba(174,235,255,.4);
   font-size: clamp(12px, 2.8vw, 16px);
   text-align: center;
   margin: 40px 0 16px;
@@ -117,6 +122,7 @@ th {
 }
 
 td {
+  color: var(--textoSuave);
   padding: 10px 8px;
   text-align: center;
   border-bottom: 1px solid rgba(174, 235, 255, 0.15);
@@ -125,6 +131,7 @@ td {
 
 tr:nth-child(even) td {
   background: var(--panel2);
+  color: var(--textoFuerte);
 }
 
 .icono {
@@ -174,14 +181,14 @@ td.icono img {
 
 .vitamina b {
   display: block;
-  color: var(--hielo);
+  color: var(--textoFuerte);
   font-size: 11px;
   margin-bottom: 6px;
 }
 
 .vitamina span {
   font-size: 9px;
-  color: #bfe3f5;
+  color: var(--textoSuave);
 }
 
 table.evs-region {
@@ -202,16 +209,17 @@ table.evs-region td {
 
 .fila-nombre {
   font-weight: bold;
-  color: var(--hielo);
+  color: var(--textoFuerte);
 }
 
 footer {
   text-align: center;
   margin-top: 50px;
   font-size: 10px;
-  color: var(--hielo);
+  color: var(--textoFuerte);
   position: relative;
   z-index: 1;
+  text-shadow: 0 0 10px rgba(174, 235, 255, 0.5);
 }
 
 body > * {
