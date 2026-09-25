@@ -1,20 +1,8 @@
-const CLAVE = "panelPokeMMO_botones";
-
-function cargar(){
-  const datos = localStorage.getItem(CLAVE);
-  if(datos) return JSON.parse(datos);
-  return [
-    {nombre:"Red", archivo:"https://reydanferret.github.io/GuiasPokeMMO/RED_By_Flambeo.html"},
-    {nombre:"Halloween (info 2025)", archivo:"https://reydanferret.github.io/GuiasPokeMMO/PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html"},
-    {nombre:"Evs", archivo:"https://reydanferret.github.io/GuiasPokeMMO/guia-evs-snowold.html"}
-  ];
-}
-
-function guardarTodo(lista){
-  localStorage.setItem(CLAVE, JSON.stringify(lista));
-}
-
-let botones = cargar();
+const botones = [
+  {nombre:"Red", archivo:"https://reydanferret.github.io/GuiasPokeMMO/RED_By_Flambeo.html"},
+  {nombre:"Halloween (info 2025)", archivo:"https://reydanferret.github.io/GuiasPokeMMO/PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html"},
+  {nombre:"Evs", archivo:"https://reydanferret.github.io/GuiasPokeMMO/guia-evs-snowold.html"}
+];
 
 function generarNieve(){
   const copos = "❄❅❆•";
@@ -39,52 +27,16 @@ generarNieve();
 function render(){
   const cont = document.getElementById("contenedor");
   cont.innerHTML = "";
-  botones.forEach((b, i) => {
+  botones.forEach((b) => {
     const tarjeta = document.createElement("div");
     tarjeta.className = "tarjeta";
     tarjeta.innerHTML = `
-      <input type="text" value="${escapeHtml(b.nombre)}" placeholder="Nombre del botón" data-tipo="nombre" data-i="${i}">
-      <input type="text" value="${escapeHtml(b.archivo)}" placeholder="archivo.html o carpeta/archivo.html" data-tipo="archivo" data-i="${i}">
-      <div class="fila-botones">
-        <button class="btn ir" data-i="${i}">▶ Ir</button>
-        <button class="btn guardar" data-i="${i}">💾 Guardar</button>
-        <button class="btn borrar" data-i="${i}">🗑 Borrar</button>
-      </div>
+      <button class="btn ir">▶ ${escapeHtml(b.nombre)}</button>
     `;
+    tarjeta.querySelector(".ir").addEventListener("click", ()=>{
+      window.open(b.archivo, "_blank");
+    });
     cont.appendChild(tarjeta);
-  });
-
-  cont.querySelectorAll(".ir").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const i = btn.dataset.i;
-      const ruta = botones[i].archivo.trim();
-      if(!ruta){ alert("Completá el archivo antes de ir."); return; }
-      window.open(ruta, "_blank");
-    });
-  });
-
-  cont.querySelectorAll(".guardar").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const i = btn.dataset.i;
-      const nombreInput = cont.querySelector(`input[data-tipo="nombre"][data-i="${i}"]`);
-      const archivoInput = cont.querySelector(`input[data-tipo="archivo"][data-i="${i}"]`);
-      botones[i].nombre = nombreInput.value;
-      botones[i].archivo = archivoInput.value;
-      guardarTodo(botones);
-      btn.textContent = "✓ Guardado";
-      setTimeout(()=>btn.textContent="💾 Guardar", 900);
-    });
-  });
-
-  cont.querySelectorAll(".borrar").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const i = btn.dataset.i;
-      if(confirm("¿Borrar este botón?")){
-        botones.splice(i,1);
-        guardarTodo(botones);
-        render();
-      }
-    });
   });
 }
 
@@ -93,11 +45,5 @@ function escapeHtml(str){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
-
-document.getElementById("agregar").addEventListener("click", ()=>{
-  botones.push({nombre:"Nueva guía", archivo:""});
-  guardarTodo(botones);
-  render();
-});
 
 render();

@@ -82,24 +82,10 @@ h1{
   gap:8px;
   box-shadow:0 4px 0 rgba(0,0,0,.4), 0 0 14px rgba(174,235,255,.15);
 }
-.tarjeta input{
-  font-family:inherit;
-  font-size:10px;
-  padding:6px;
-  border-radius:6px;
-  border:2px solid var(--hieloOscuro);
-  background:#081324;
-  color:#eaf8ff;
-}
-.fila-botones{
-  display:flex;
-  gap:6px;
-}
 .btn{
-  flex:1;
   font-family:inherit;
-  font-size:10px;
-  padding:10px 6px;
+  font-size:11px;
+  padding:14px 10px;
   border:none;
   border-radius:6px;
   cursor:pointer;
@@ -107,31 +93,6 @@ h1{
 }
 .btn:active{transform:scale(.95);}
 .ir{background:var(--hieloOscuro);color:#04202e;}
-.guardar{background:var(--azul);color:#fff;}
-.borrar{background:#3a3a55;color:#fff;}
-#agregar{
-  margin-top:26px;
-  background:linear-gradient(90deg,var(--hielo),var(--hieloOscuro));
-  color:#04202e;
-  font-family:inherit;
-  font-size:12px;
-  padding:14px 22px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  box-shadow:0 4px 0 #2b7f96;
-  z-index:1;
-}
-#agregar:active{transform:translateY(2px);box-shadow:0 2px 0 #2b7f96;}
-.aviso{
-  font-size:9px;
-  color:#a9d6ec;
-  max-width:600px;
-  text-align:center;
-  margin-top:26px;
-  line-height:1.6;
-  z-index:1;
-}
 .pokebola{
   width:26px;height:26px;border-radius:50%;
   background:linear-gradient(var(--hieloOscuro) 50%, #fff 50%);
