@@ -106,102 +106,108 @@ const ELITEFOUR = [
 /* ===== Generación de tablas ===== */
 
 let regions = [];
+
 function add_sub_table(region, name) {
-    let div = document.querySelector(`#${name}s`);
+    const div = document.querySelector(`#${name}s`);
 
     // Columna de Bootstrap: 1 por fila en mobile, 2 en tablet, 3 en desktop.
     // Bootstrap ya estira todas las columnas de una misma fila a la altura
     // de la más alta, así que ninguna tarjeta queda "corta".
-    let colWrapper = document.createElement("div");
+    const colWrapper = document.createElement("div");
     colWrapper.classList.add("col-12", "col-sm-6", "col-lg-4");
 
     // Tarjeta interna: ocupa toda la altura de la columna (ver .region-card
     // en styles.css) para que no quede un hueco vacío al lado de otra región.
-    let cardWrapper = document.createElement("div");
+    const cardWrapper = document.createElement("div");
     cardWrapper.classList.add("region-card", "d-flex", "flex-column", "p-2");
 
     // Encabezado de la región (H3)
-    let header = document.createElement("h3");
+    const header = document.createElement("h3");
     header.innerHTML = region;
     header.classList.add("fs-5", "mb-2", "mt-0");
     cardWrapper.appendChild(header);
 
     // Tabla limpia sin 'table-fixed'
-    let table = document.createElement("table");
+    const table = document.createElement("table");
     table.setAttribute("id", `${region.toLowerCase()}-${name}s`);
     table.classList.add("table", "table-sm", "m-0");
-    
-    if(name == "trainer") {
-        table.innerHTML="<tr><th></th><th>Ubicación</th><th>Entrenador</th><th>Ganancia</th></tr>";
-    } else if (name == "gym") {
-        table.innerHTML="<tr><th></th><th>Ciudad</th><th>Líder</th><th>Ganancia</th></tr>";
+
+    if (name === "trainer") {
+        table.innerHTML = "<tr><th></th><th>Ubicación</th><th>Entrenador</th><th>Ganancia</th></tr>";
+    } else if (name === "gym") {
+        table.innerHTML = "<tr><th></th><th>Ciudad</th><th>Líder</th><th>Ganancia</th></tr>";
     }
-    
+
     cardWrapper.appendChild(table);
     colWrapper.appendChild(cardWrapper);
     div.appendChild(colWrapper);
-    
-    regions.push(name+region);
+
+    regions.push(name + region);
 }
 
 // Función encargada de llenar las filas
 function fill_table(unit, name) {
-    if(!regions.includes(name+unit.region)){
+    if (!regions.includes(name + unit.region)) {
         add_sub_table(unit.region, name);
     }
-    let table = document.querySelector(`#${unit.region.toLowerCase()}-${name}s`);
-    let row = table.insertRow();
-    let check_cell = row.insertCell();
-    let check_input = document.createElement("input");
-    check_input.type = "checkbox";
-    check_input.id = unit.id;
-    check_input.name = unit.name;
-    check_input.value = unit.profit;
-    check_input.classList.add("form-check-input");
-    check_cell.appendChild(check_input);
+
+    const table = document.querySelector(`#${unit.region.toLowerCase()}-${name}s`);
+    const row = table.insertRow();
+    const checkCell = row.insertCell();
+    const checkInput = document.createElement("input");
+
+    checkInput.type = "checkbox";
+    checkInput.id = unit.id;
+    checkInput.name = unit.name;
+    checkInput.value = unit.profit;
+    checkInput.classList.add("form-check-input");
+    checkCell.appendChild(checkInput);
 
     delete unit.region;
-    Object.keys(unit).filter(v => v != "id").forEach((k, i) => {
-        let cell = row.insertCell();
-        let text = document.createTextNode(unit[k]);
-        cell.appendChild(text);
-    });
+    Object.keys(unit)
+        .filter((key) => key !== "id")
+        .forEach((key) => {
+            const cell = row.insertCell();
+            const text = document.createTextNode(unit[key]);
+            cell.appendChild(text);
+        });
 }
 
-GYMS.forEach(gym => {fill_table(gym, "gym");});
-TRAINERS.forEach(trainer => {fill_table(trainer, "trainer");});
+GYMS.forEach((gym) => fill_table(gym, "gym"));
+TRAINERS.forEach((trainer) => fill_table(trainer, "trainer"));
 
 const eliteFourDiv = document.querySelector('#elite-four');
-let eliteFourTable = document.createElement("table");
-eliteFourTable.setAttribute("id","elite-four-table");
-eliteFourTable.classList.add("table","table-sm","table-fixed","gym-table");
-eliteFourTable.innerHTML="<tr><th></th><th>Región</th><th>Ganancia Base</th></tr>";
+const eliteFourTable = document.createElement("table");
+eliteFourTable.setAttribute("id", "elite-four-table");
+eliteFourTable.classList.add("table", "table-sm", "table-fixed", "gym-table");
+eliteFourTable.innerHTML = "<tr><th></th><th>Región</th><th>Ganancia Base</th></tr>";
 eliteFourDiv.appendChild(eliteFourTable);
 
-ELITEFOUR.forEach(team =>{
-    let eliteFourTable = document.querySelector('#elite-four-table');
-    let row = eliteFourTable.insertRow();
-    let check_cell = row.insertCell();
-    let check_input = document.createElement("input");
+ELITEFOUR.forEach((team) => {
+    const row = eliteFourTable.insertRow();
+    const checkCell = row.insertCell();
+    const checkInput = document.createElement("input");
 
-    check_input.type = "checkbox";
-    check_input.id = team.id;
-    check_input.name = team.region;
-    check_input.value = team.profit;
-    check_input.classList.add("form-check-input");
+    checkInput.type = "checkbox";
+    checkInput.id = team.id;
+    checkInput.name = team.region;
+    checkInput.value = team.profit;
+    checkInput.classList.add("form-check-input");
+    checkCell.appendChild(checkInput);
 
-    check_cell.appendChild(check_input);
-    Object.keys(team).filter(v => v != "id").forEach((k, i) => {
-        let cell = row.insertCell();
-        let text = document.createTextNode(team[k]);
-        cell.appendChild(text);
-    });
+    Object.keys(team)
+        .filter((key) => key !== "id")
+        .forEach((key) => {
+            const cell = row.insertCell();
+            const text = document.createTextNode(team[key]);
+            cell.appendChild(text);
+        });
 });
 
 
 /* ===== Lógica de cálculo y eventos ===== */
 class Item {
-    constructor(name,id,bp){
+    constructor(name, id) {
         this.name = name;
         this.id = id;
     }
@@ -220,38 +226,35 @@ function currencyFormat(x) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
     });
-};
+}
 
 function updateTotal() {
     let gymTotal = 0;
     let trainerTotal = 0;
     let eliteFourTotal = 0;
 
-    document.querySelectorAll('#gyms input[type="checkbox"]:checked')
-    .forEach((checkbox) => {
-        gymTotal += parseInt(checkbox.value);
+    document.querySelectorAll('#gyms input[type="checkbox"]:checked').forEach((checkbox) => {
+        gymTotal += parseInt(checkbox.value, 10);
     });
 
-    document.querySelectorAll('#trainers input[type="checkbox"]:checked')
-    .forEach((checkbox) => {
-        trainerTotal += parseInt(checkbox.value);
-    });
-    document.querySelectorAll('#elite-four input[type="checkbox"]:checked')
-    .forEach((checkbox) => {
-        eliteFourTotal += parseInt(checkbox.value);
+    document.querySelectorAll('#trainers input[type="checkbox"]:checked').forEach((checkbox) => {
+        trainerTotal += parseInt(checkbox.value, 10);
     });
 
-    let donator = ((document.getElementById("donator").checked) ? 1.05 : 1);
+    document.querySelectorAll('#elite-four input[type="checkbox"]:checked').forEach((checkbox) => {
+        eliteFourTotal += parseInt(checkbox.value, 10);
+    });
 
-    let total = (gymTotal+trainerTotal+eliteFourTotal)*donator;
-    let amuletCoinTotal = total*1.5-document.getElementById('amulet-coin-in').value;
-    let riches75Total =    total*1.75-document.getElementById('riches-75-in').value;
-    let riches100Total = total*2.0-document.getElementById('riches-100-in').value;
+    const donator = document.getElementById("donator").checked ? 1.05 : 1;
+    const total = (gymTotal + trainerTotal + eliteFourTotal) * donator;
+    const amuletCoinTotal = total * 1.5 - Number(document.getElementById('amulet-coin-in').value || 0);
+    const riches75Total = total * 1.75 - Number(document.getElementById('riches-75-in').value || 0);
+    const riches100Total = total * 2.0 - Number(document.getElementById('riches-100-in').value || 0);
 
-    let noCharm = document.querySelector('#no-charm');
-    let amuletCoin = document.querySelector('#amulet-coin');
-    let riches75 = document.querySelector('#riches-75');
-    let riches100 = document.querySelector('#riches-100');
+    const noCharm = document.querySelector('#no-charm');
+    const amuletCoin = document.querySelector('#amulet-coin');
+    const riches75 = document.querySelector('#riches-75');
+    const riches100 = document.querySelector('#riches-100');
 
     noCharm.textContent = 'Sin amuleto: ' + currencyFormat(total);
     amuletCoin.textContent = 'Moneda Amuleto: ' + currencyFormat(amuletCoinTotal);
@@ -259,33 +262,58 @@ function updateTotal() {
     riches100.textContent = 'Riquezas 100%: ' + currencyFormat(riches100Total);
 
     textToLink();
-};
+}
 
 function updateGymCount() {
-    var section = document.getElementById('gyms');
-    var checkboxes = section.querySelectorAll('input[type="checkbox"]');
-    var headingBeforeSection = section.previousElementSibling;
+    updateCountBySection('gyms', 'Gimnasios');
+}
 
-    var checkedCount = 0;
-    checkboxes.forEach(function(checkbox) {
-if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Gimnasios";} else {headingBeforeSection.textContent = "Gimnasios [" + checkedCount + "]";}}function updateEliteFourCount() {var section = document.getElementById('elite-four');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Alto Mando";} else {headingBeforeSection.textContent = "Alto Mando [" + checkedCount + "]";}}function updateTrainerCount() {var section = document.getElementById('trainers');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Entrenadores";} else {headingBeforeSection.textContent = "Entrenadores [" + checkedCount + "]";}}document.addEventListener("DOMContentLoaded", function(event) {
-    /* Cargar selecciones desde la URL, si vienen por parámetro ?vals= */
+function updateEliteFourCount() {
+    updateCountBySection('elite-four', 'Alto Mando');
+}
+
+function updateTrainerCount() {
+    updateCountBySection('trainers', 'Entrenadores');
+}
+
+function updateCountBySection(sectionId, label) {
+    const section = document.getElementById(sectionId);
+    const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+    const headingBeforeSection = section.previousElementSibling;
+
+    let checkedCount = 0;
+    checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+            checkedCount += 1;
+        }
+    });
+
+    headingBeforeSection.textContent = checkedCount === 0
+        ? label
+        : `${label} [${checkedCount}]`;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
     const valsParam = getParameterByName("vals");
     let vals = [];
+
     if (valsParam) {
         vals = valsParam.split(",");
-        vals.forEach((k, i) => {
-            document.getElementById(k).checked = true;
+        vals.forEach((id) => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
         });
     }
 
     const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-    var checkedBoxIDs = [];
-    checkedBoxes.forEach((k, i) => {
-        checkedBoxIDs.push(k.id);
+    const checkedBoxIDs = [];
+    checkedBoxes.forEach((checkbox) => {
+        checkedBoxIDs.push(checkbox.id);
     });
 
-    if (checkedBoxes.length != 0) {
+    if (checkedBoxes.length !== 0) {
         updateTotal();
         updateGymCount();
         updateTrainerCount();
@@ -296,14 +324,17 @@ if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSect
         updateTotal();
         updateGymCount();
     });
+
     document.querySelector('#trainers').addEventListener('change', () => {
         updateTotal();
         updateTrainerCount();
     });
+
     document.querySelector('#elite-four').addEventListener('change', () => {
         updateTotal();
         updateEliteFourCount();
     });
+
     document.querySelector('#charm-form').addEventListener('input', () => {
         updateTotal();
     });
@@ -312,90 +343,104 @@ if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSect
 });
 
 function textToLink() {
-    const linkInput = document.querySelector("#link");
-    if (linkInput) {
-        linkInput.value = createURL();
-    }
+    document.querySelector("#link").value = createURL();
 }
 
 function createURL() {
     const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-    let checkedBoxIDs = [];
-    checkedBoxes.forEach((k, i) => {
-        checkedBoxIDs.push(k.id);
+    const checkedBoxIDs = [];
+
+    checkedBoxes.forEach((checkbox) => {
+        checkedBoxIDs.push(checkbox.id);
     });
-    let idstring = checkedBoxIDs.join(",");
-    idstring = idstring.replace("donator,", "");
-    idstring = idstring.replace("donator", "");
-    let s = window.location.origin + window.location.pathname + "?vals=" + idstring;
-    return s;
+
+    let idString = checkedBoxIDs.join(",");
+    idString = idString.replace("donator,", "");
+    idString = idString.replace("donator", "");
+
+    return window.location.origin + window.location.pathname + "?vals=" + idString;
 }
 
 function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
+    name = name.replace(/[[]]/g, '$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    const results = regex.exec(url);
+
+    if (!results) {
+        return null;
+    }
+
+    if (!results[2]) {
+        return '';
+    }
+
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
 function getItemPrices(items) {
-    let itemsWithPrices = [];
+    const itemsWithPrices = [];
+
     fetch('fiereu.de')
-        .then(response => {
+        .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
         })
-        .then(data => {
-            for (let item of items) {
-                let searchId = item.id;
+        .then((data) => {
+            for (const item of items) {
+                const searchId = item.id;
                 let foundItem = null;
-                let itemPriceArray = data;
-                for (let j = 0; j < itemPriceArray.length; j++) {
-                    if (itemPriceArray[j].item_id == searchId) {
-                        foundItem = itemPriceArray[j];
+
+                for (let j = 0; j < data.length; j++) {
+                    if (data[j].item_id == searchId) {
+                        foundItem = data[j];
                         break;
                     }
                 }
+
                 if (foundItem) {
-                    let price = foundItem.price;
-                    item.price = price;
+                    item.price = foundItem.price;
                     itemsWithPrices.push(item);
                 } else {
                     console.log('Objeto no encontrado');
                 }
             }
+
             if (itemsWithPrices.length === items.length) {
-                document.getElementById('amulet-coin-in').value = itemsWithPrices.find(item => item.id === "5223")?.price;
-                document.getElementById('riches-75-in').value = itemsWithPrices.find(item => item.id === "1412")?.price;
-                document.getElementById('riches-100-in').value = itemsWithPrices.find(item => item.id === "1413")?.price;
+                document.getElementById('amulet-coin-in').value = itemsWithPrices.find((item) => item.id === "5223")?.price;
+                document.getElementById('riches-75-in').value = itemsWithPrices.find((item) => item.id === "1412")?.price;
+                document.getElementById('riches-100-in').value = itemsWithPrices.find((item) => item.id === "1413")?.price;
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Hubo un problema con la petición:', error);
         });
 }
 
 /* ===== Efecto de nieve ===== */
+
+
 function generarNieve() {
     const copos = "❄❅❆•";
     const cantidad = 35;
+
     for (let i = 0; i < cantidad; i++) {
         const copo = document.createElement("span");
         copo.className = "nieve";
         copo.textContent = copos[Math.floor(Math.random() * copos.length)];
+
         const tam = 10 + Math.random() * 18;
         copo.style.left = Math.random() * 100 + "vw";
         copo.style.fontSize = tam + "px";
         copo.style.opacity = 0.4 + Math.random() * 0.6;
         copo.style.setProperty("--deriva", (Math.random() * 80 - 40) + "px");
+
         const duracion = 8 + Math.random() * 10;
         copo.style.animationDuration = duracion + "s";
         copo.style.animationDelay = (Math.random() * duracion) + "s";
         document.body.appendChild(copo);
     }
 }
+
 generarNieve();
