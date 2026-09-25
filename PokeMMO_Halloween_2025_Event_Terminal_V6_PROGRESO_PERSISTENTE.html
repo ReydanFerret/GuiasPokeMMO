@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PokeMMO Halloween 2025 — Event Terminal</title>
+<style>
+:root{
+  --bg:#090812;--panel:#12101e;--panel2:#191528;--line:#312846;--txt:#f5f1ff;--muted:#aaa1bd;
+  --orange:#ff8a2a;--purple:#9b6cff;--green:#56d68b;--red:#ff6477;--yellow:#ffd166;--cyan:#69d8e7;
+}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 50% -20%,#28143f 0,#0b0913 45%,#07060d 100%);color:var(--txt);font-family:Inter,Segoe UI,Arial,sans-serif}
+header{padding:28px 22px 18px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#1b1027aa,#0a0812cc);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}
+h1{margin:0;font-size:clamp(25px,4vw,42px);letter-spacing:.5px}.pump{color:var(--orange)} .sub{color:var(--muted);margin-top:7px}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 16px;border-bottom:1px solid var(--line);background:#0b0914;position:sticky;top:92px;z-index:9}
+nav button,.btn{border:1px solid var(--line);background:#171323;color:#ddd5ec;padding:10px 13px;border-radius:11px;cursor:pointer;font-weight:700;white-space:nowrap}
+nav button.active,.btn.primary{background:linear-gradient(135deg,#7d43d6,#a35cf1);color:#fff;border-color:#b983ff}
+main{max-width:1220px;margin:auto;padding:18px}.tab{display:none}.tab.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}.card{background:linear-gradient(180deg,#151121,#100d19);border:1px solid var(--line);border-radius:16px;padding:17px}
+.card h3{margin:0 0 8px}.tag{display:inline-block;border:1px solid #4a3d64;background:#211a32;padding:4px 8px;border-radius:999px;font-size:12px;color:#cfc4e4}
+.orange{color:var(--orange)}.green{color:var(--green)}.yellow{color:var(--yellow)}.cyan{color:var(--cyan)}.muted{color:var(--muted)}
+.hero{display:grid;grid-template-columns:1fr;gap:15px;margin-bottom:15px}.hero .card:first-child{min-height:190px}
+.progress{height:10px;background:#282033;border-radius:999px;overflow:hidden;margin-top:8px}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--orange));width:0}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.stat{background:#0c0a13;border:1px solid #2a2238;border-radius:12px;padding:12px;text-align:center}.stat b{display:block;font-size:22px}
+.task{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed #30273f}.task:last-child{border:0}.task input{margin-top:4px;accent-color:#a45df2;transform:scale(1.15)}
+.counter{display:flex;align-items:center;gap:8px;margin:9px 0}.counter b{min-width:44px;text-align:center;font-size:20px}.mini{padding:7px 10px;border:1px solid #403451;background:#201a2d;color:#fff;border-radius:9px;cursor:pointer}
+.regionTabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.regionTabs button{padding:8px 11px;border-radius:9px;border:1px solid var(--line);background:#171322;color:#ddd;cursor:pointer}.regionTabs button.on{border-color:var(--orange);color:#fff;background:#2c1b1a}
+.wispList{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}.wisp{display:flex;gap:8px;align-items:center;padding:9px;background:#0d0b14;border:1px solid #2a2335;border-radius:10px}.wisp input{accent-color:#8e61ff}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;border-bottom:1px solid #2b2338}th{color:#c6b8dc;font-size:13px}.notice{border-left:4px solid var(--yellow);background:#201b13;padding:12px 14px;border-radius:8px;color:#eadfbf;margin:12px 0}
+.timer{font:700 36px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+details{border:1px solid #30273f;border-radius:12px;padding:11px;margin:8px 0;background:#0e0c16}summary{cursor:pointer;font-weight:800}
+footer{color:#81778f;text-align:center;padding:30px 15px;font-size:12px}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.statrow{grid-template-columns:1fr 1fr}nav{top:88px}header{padding:18px 12px 12px}}
+
+.raidgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:18px 0}
+.raidcard{position:relative;display:flex;align-items:center;gap:10px;min-height:112px;padding:12px;background:linear-gradient(145deg,#171323,#0d0b14);border:1px solid #342a45;border-radius:14px;cursor:pointer;transition:.18s}
+.raidcard:hover{transform:translateY(-2px);border-color:#75539d}
+.raidcard img{width:88px;height:88px;object-fit:contain;image-rendering:auto}
+.raidcard span{display:flex;flex-direction:column;min-width:0}.raidcard b{font-size:17px}.raidcard small{color:var(--muted);margin-top:4px}
+.raidcard input{position:absolute;right:11px;top:11px;transform:scale(1.25);accent-color:var(--green)}
+.darkraiBox{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center;margin-top:22px;padding:18px;border:1px solid #654f8a;border-radius:18px;background:radial-gradient(circle at 10% 50%,#39254d 0,#171020 38%,#0e0b16 100%)}
+.darkraiArt{text-align:center}.darkraiArt img{width:135px;height:135px;object-fit:contain}
+@media(max-width:560px){.darkraiBox{grid-template-columns:1fr}.darkraiArt img{width:120px;height:120px}}
+
+
+.guidebox{margin:14px 0 18px;padding:15px 16px;border:1px solid #463653;border-radius:14px;background:linear-gradient(135deg,#171120,#100d17)}
+.guidebox h3{margin:0 0 8px;color:#ffb067}.guidebox ol{margin:7px 0 0;padding-left:21px}.guidebox li{margin:6px 0;color:#d7cfe2}
+.pokeTeam{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px;margin-top:12px}
+.pokeMini{display:flex;gap:10px;align-items:flex-start;padding:11px;background:#0c0a12;border:1px solid #30263d;border-radius:12px}
+.pokeMini img{width:74px;height:74px;object-fit:contain}.pokeMini h4{margin:2px 0 4px}.pokeMini p{margin:2px 0;font-size:12px;color:#bbb0ca}
+.cluegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}.clue{padding:11px;border:1px solid #30273f;border-radius:11px;background:#0d0b14}.clue b{color:#ffbd75}.clue p{margin:5px 0 0;color:#bbb0ca;font-size:13px}
+.wispChecks{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px;margin-top:12px}.wispCheck{display:flex;gap:8px;align-items:center;padding:9px;border:1px solid #30273f;border-radius:10px;background:#0d0b14}.wispCheck input{accent-color:#9b6cff}
+.sourceNote{font-size:12px;color:#8f849f;margin-top:10px}
+
+.raidcard{user-select:none}
+.raidcard.raid-open{cursor:pointer}
+.raidcard.raid-open::after{content:"Ver ficha";position:absolute;right:10px;bottom:9px;font-size:10px;font-weight:900;color:#cdbce7;letter-spacing:.04em}
+.raidcard.raid-open:hover{box-shadow:0 10px 32px #0008}
+.raidcard .raidcheck{z-index:3}
+.darkraiBox.raid-open{cursor:pointer;transition:.18s}
+.darkraiBox.raid-open:hover{transform:translateY(-2px);border-color:#a77ade;box-shadow:0 12px 36px #0008}
+
+.raidScreen{position:fixed;inset:0;z-index:1000;background:radial-gradient(circle at 75% 0,#372052 0,#0c0913 42%,#06050a 100%);display:none;overflow:auto}
+.raidScreen.open{display:block}
+.raidScreenInner{max-width:1050px;margin:auto;padding:22px 20px 60px}
+.raidBack{display:inline-flex;align-items:center;gap:8px;border:1px solid #4a3d64;background:#171323;color:#eee5ff;border-radius:11px;padding:10px 14px;font-weight:850;cursor:pointer;margin-bottom:20px}
+.raidHero{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:center;padding:25px;border:1px solid #403350;background:linear-gradient(145deg,#1b1426,#0e0b14);border-radius:20px}
+.raidHero img{width:210px;height:210px;object-fit:contain;filter:drop-shadow(0 18px 20px #0008)}
+.raidHero h2{font-size:clamp(38px,7vw,68px);margin:4px 0 8px;line-height:.95}
+.raidStars{font-size:24px;color:#ffd166;font-weight:950}
+.typePills{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.typePills span{border:1px solid #51416b;background:#251c34;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:850}
+.raidInfoGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:14px}
+.raidInfoCard{border:1px solid #342942;background:linear-gradient(#15111f,#0e0b14);border-radius:16px;padding:17px}
+.raidInfoCard h3{margin:0 0 12px;color:#ffb067}
+.locationList{display:grid;gap:7px}.locationRow{display:grid;grid-template-columns:94px 1fr;gap:10px;padding:10px;background:#0b0910;border:1px solid #2a2135;border-radius:10px}.locationRow b{color:#b899e8}
+.raidStatsBig{display:grid;grid-template-columns:1fr 1fr;gap:10px}.raidStatsBig div{padding:16px;background:#0b0910;border:1px solid #2a2135;border-radius:12px;text-align:center}.raidStatsBig b{display:block;color:#aaa1bd;font-size:11px;text-transform:uppercase}.raidStatsBig strong{display:block;font-size:30px;margin-top:3px}
+.strategyBox{margin-top:10px;padding:14px;background:#151024;border:1px solid #4a3760;border-radius:12px}.strategyBox b{display:block;color:#aaa1bd;font-size:11px;text-transform:uppercase;margin-bottom:4px}.strategyBox strong{font-size:19px}
+.attackBox{margin-top:10px;padding:14px;background:#101a18;border:1px solid #285444;border-radius:12px}.attackBox b{display:block;color:#91b9a9;font-size:11px;text-transform:uppercase;margin-bottom:4px}.attackBox strong{font-size:18px;color:#c7f5df}
+.raidSource{margin-top:14px;font-size:12px;color:#8e849c}
+@media(max-width:700px){.raidHero{grid-template-columns:1fr;text-align:center}.raidHero img{margin:auto;width:165px;height:165px}.typePills{justify-content:center}.raidInfoGrid{grid-template-columns:1fr}.locationRow{grid-template-columns:75px 1fr}}
+
+
+.raidPopular{margin-top:14px}
+.raidPopular h3{margin:0 0 5px;color:#ffb067}
+.raidPopular .popularIntro{margin:0 0 12px;color:#aaa1bd;font-size:13px}
+.popularGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.popularMon{position:relative;min-height:175px;padding:10px 9px 12px;text-align:center;background:linear-gradient(145deg,#151020,#0b0910);border:1px solid #332840;border-radius:13px}
+.popularMon img{width:92px;height:92px;object-fit:contain;display:block;margin:0 auto 4px;filter:drop-shadow(0 8px 8px #0007)}
+.popularMon b{display:block;font-size:15px}.popularMon small{display:block;color:#a99db7;font-size:11px;line-height:1.25;margin-top:3px}
+.popularMon .roleTag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#241a32;border:1px solid #49365e;color:#d8c3f2;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.popularWarn{margin-top:11px;padding:10px 12px;border-radius:10px;background:#17131d;border:1px dashed #554468;color:#a99db7;font-size:11px}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>🎃 <span class="pump">PokeMMO Halloween 2025</span> — Event Terminal</h1>
+  <div class="sub">Guía interactiva + checklist + contadores · basada en el evento y guías comunitarias de 2025</div>
+</header>
+<nav id="nav">
+<button data-tab="inicio" class="active">🏠 Resumen</button>
+<button data-tab="swarm">🐾 Swarms & niños</button>
+<button data-tab="candy">🍬 Caramelos & minibosses</button>
+<button data-tab="pumpking">👑 Rey Calabaza</button>
+<button data-tab="wisps">🔥 Fuegos fatuos</button>
+<button data-tab="pumpcat">🐈 Pumpcat</button>
+<button data-tab="raids">⚔️ Raids</button>
+<button data-tab="tracker">⏱️ Tracker</button>
+</nav>
+
+<main>
+<section id="inicio" class="tab active">
+ <div class="hero">
+  <div class="card">
+   <span class="tag">EVENTO 2025</span>
+   <h2>Tu ruta completa de Halloween</h2>
+   <p class="muted">El evento combinó farmeo repetible, capturas de swarm, entregas, búsqueda por las cinco regiones, Pumpking, Pumpcat, PvP especial y 7 raids de Halloween. Marca lo que vayas completando y el navegador guardará tu progreso.</p>
+   <div class="progress"><i id="globalBar"></i></div>
+   <p><b id="globalPct">0%</b> de objetivos principales completados</p>
+  </div>
+
+ </div>
+ <div class="grid">
+  <div class="card"><h3>🐾 1. Swarms</h3><p>Captura Pokémon de las apariciones masivas del evento. Puedes entregarlos a los NPC de la excursión/niños para conseguir recompensas.</p><label class="task"><input class="goal" type="checkbox" data-k="g-swarm"><span>He empezado el circuito de swarms</span></label></div>
+  <div class="card"><h3>🍬 2. Caramelos especiales</h3><p>Derrota a los niños/entrenadores y a los espíritus o encuentros especiales de Halloween para obtener <b>Special Candy</b>, usado para desafiar al Pumpking.</p><label class="task"><input class="goal" type="checkbox" data-k="g-candy"><span>He conseguido caramelos especiales</span></label></div>
+  <div class="card"><h3>👑 3. Pumpking</h3><p>Entrega un caramelo para combatir. En 2025 estaba disponible en <b>Lavender, Fallarbor, Solaceon, Driftveil y Ecruteak</b>. El modo difícil daba la bolsa exclusiva del jefe.</p><label class="task"><input class="goal" type="checkbox" data-k="g-pump"><span>He vencido al Rey Calabaza</span></label></div>
+  <div class="card"><h3>🔥 4. Fuegos fatuos</h3><p>Busca los wisps repartidos por las regiones. Completar la búsqueda desbloquea el encuentro estacional especial, incluido el <b>Spiritomb Alfa</b>.</p><label class="task"><input class="goal" type="checkbox" data-k="g-wisp"><span>He completado la búsqueda de wisps</span></label></div>
+  <div class="card"><h3>🐈 5. Pumpcat</h3><p>El gato calabaza aparece escondido y va cambiando de ubicación. Encontrarlo repetidamente concede recompensas y cosméticos exclusivos.</p><label class="task"><input class="goal" type="checkbox" data-k="g-cat"><span>He completado mi objetivo de Pumpcat</span></label></div>
+  <div class="card"><h3>⚔️ 6. Raids</h3><p>Durante 2025 aparecieron con más frecuencia los dens. Completar las <b>7 raids de Halloween</b> era el requisito para avanzar al contenido de Fullmoon Island.</p><label class="task"><input class="goal" type="checkbox" data-k="g-raid"><span>He completado las 7 raids</span></label></div>
+ </div>
+</section>
+
+<section id="swarm" class="tab">
+ <div class="card">
+  <h2>🐾 Swarm Exchange — circuito de captura</h2>
+<div class="guidebox"><h3>📖 Guía rápida</h3><ol>
+<li>Localiza un <b>swarm de Halloween</b> y captura los Pokémon solicitados.</li>
+<li>Llévalos a la zona de entrega del evento. Puedes entregarlos a los <b>niños</b> o al <b>profesor</b>.</li>
+<li>Para farmear recompensas, encadena swarms y usa los contadores inferiores para no perder la cuenta.</li>
+<li>Si buscas el progreso del cosmético <b>Froggy</b>, prioriza las entregas a los niños: la comunidad confirmó que esas entregas eran las que contaban.</li>
+</ol></div>
+  <div class="notice">Dato comunitario de 2025: las entregas a los niños daban una <b>Mysterious Dusk Ball cada 4 entregas</b>; el profesor/teacher pedía lotes de <b>5 Pokémon de swarm</b>. Los jugadores señalaron que el progreso del cosmético Froggy contaba con las entregas a niños, no con las del profesor.</div>
+  <div class="grid">
+   <div><h3>Entregas a niños</h3><div class="counter"><button class="mini minus" data-c="kids">−</button><b id="kids">0</b><button class="mini plus" data-c="kids">+</button></div><p class="muted">Dusk Balls estimadas por ciclos completos: <b id="balls">0</b></p></div>
+   <div><h3>Entregas al profesor</h3><div class="counter"><button class="mini minus" data-c="teacher">−</button><b id="teacher">0</b><button class="mini plus" data-c="teacher">+</button></div><p class="muted">Lotes de 5 completados: <b id="teacherLots">0</b></p></div>
+   <div><h3>Swarms capturados</h3><div class="counter"><button class="mini minus" data-c="swarms">−</button><b id="swarms">0</b><button class="mini plus" data-c="swarms">+</button></div><p class="muted">Úsalo como contador de rondas.</p></div>
+  </div>
+  <details><summary>¿Qué tiene de especial la Mysterious Dusk Ball?</summary><p>El changelog de 2025 describe las recompensas de la excursión de swarms como misteriosas Dusk Balls con una probabilidad de shiny elevada. La comunidad también las usó como incentivo de farmeo por la posibilidad de resultados valiosos.</p></details>
+ </div>
+</section>
+
+<section id="candy" class="tab">
+ <div class="grid">
+  <div class="card"><h2>🍬 Special Candy</h2>
+<div class="guidebox"><h3>📖 Cómo funciona</h3><ol>
+<li>Busca los NPC/encuentros de Halloween repartidos por el mundo.</li><li>Véncelos para alimentar el circuito de <b>Special Candy</b>.</li>
+<li>Acumula varios antes de ir al Rey Calabaza para poder repetir intentos sin volver a farmear inmediatamente.</li><li>Los contadores de esta página son manuales: pulsa + cuando obtengas o completes cada objetivo.</li></ol></div><p>El bucle clásico del evento: derrota los encuentros/NPC de Halloween → consigue caramelos → gástalos para acceder al combate contra Pumpking.</p>
+   <div class="counter"><button class="mini minus" data-c="candies">−</button><b id="candies">0</b><button class="mini plus" data-c="candies">+</button></div>
+   <p class="muted">Cada intento de Pumpking consume recursos del evento; lleva aquí tu saldo manual.</p>
+  </div>
+  <div class="card"><h2>🎃 Minibosses / espíritus</h2>
+<div class="guidebox"><h3>📖 Guía rápida</h3><ol><li>Recorre las zonas del evento y localiza los encuentros especiales.</li><li>Entra preparado para combates más duros que un entrenador normal.</li><li>Derrotarlos forma parte del bucle de obtención de recursos de Halloween.</li><li>Si estás haciendo una ruta de farmeo, registra cada victoria abajo para comparar rondas.</li></ol></div><p>En guías de Halloween se suele llamar “miniboss” a los encuentros que alimentan el circuito de caramelos. En el changelog 2025 se formula como <b>“teach the kids a lesson … do the same to Halloween spirits”</b>.</p>
+   <div class="counter"><button class="mini minus" data-c="miniboss">−</button><b id="miniboss">0</b><button class="mini plus" data-c="miniboss">+</button></div>
+   <p class="muted">Contador de encuentros derrotados.</p>
+  </div>
+ </div>
+</section>
+
+<section id="pumpking" class="tab">
+ <div class="card">
+  <h2>👑 Rey Calabaza / Pumpking</h2>
+  <p>Se podía localizar en cinco ciudades, una por región. Marca las que hayas usado como punto de acceso.</p><div class="guidebox"><h3>📖 Guía rápida del Rey Calabaza</h3><ol>
+<li>Consigue <b>Special Candy</b> antes de ir al NPC del Rey.</li>
+<li>El combate tiene <b>3 fases consecutivas</b> y no debes contar con una curación automática entre ellas.</li>
+<li>En Normal, nuestro núcleo preparado es <b>Chandelure + Typhlosion + Krookodile</b>: conserva los PS de Typhlosion para mantener la potencia de Estallido.</li>
+<li>En Difícil usamos la variante Rumel/Turtle que auditamos: <b>Aerodactyl + Krookodile + Gothitelle + Tyranitar</b>. El spread de Gothitelle es deliberadamente extraño y no conviene modificarlo a ciegas.</li>
+</ol></div>
+<div class="pokeTeam">
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/609.png"><div><h4>Chandelure · Normal</h4><p>Modesta · Gema Fantasma</p><p>31 At. Esp. / 31 Vel. · Bola Sombra · Velo Sagrado</p></div></div>
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/157.png"><div><h4>Typhlosion · Normal</h4><p>Modesta · Gafas Elegidas</p><p>31 At. Esp. / 31 Vel. · Estallido</p></div></div>
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png"><div><h4>Krookodile · Normal</h4><p>Firme · Cinta Elegida</p><p>31 Atq. / 31 Vel. · Buena Baza</p></div></div>
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/142.png"><div><h4>Aerodactyl Nv.100 · Difícil</h4><p>Alegre · Cabeza Roca · Baya Ziuela</p><p>252 PS / 150 Def / 108 Def.Esp · Vasta Guardia · Viento Afín · Mofa · Vuelo</p></div></div>
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/576.png"><div><h4>Gothitelle Nv.94 · Difícil</h4><p>Ingenua · Competitivo · Pañuelo Elegido</p><p>250 PS / 252 Vel · Anticura · Mofa · Psicocarga · Psíquico</p></div></div>
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png"><div><h4>Krookodile Nv.100 · Difícil</h4><p>Firme · Autoestima · Cinta Elegida</p><p>6 PS / 252 Atq / 130 Def / 122 Vel · Terremoto · Triturar · Buena Baza · Trampa Rocas</p></div></div>
+ <div class="pokeMini"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/248.png"><div><h4>Tyranitar Nv.100 · Difícil</h4><p>Firme · Chorro Arena · Globo Helio</p><p>6 PS / 252 Atq / 252 Vel · Buena Baza · Triturar · Terremoto · Tóxico</p></div></div>
+</div>
+<p class="sourceNote">Equipo copiado de nuestra V8 auditada del HTML del Rey Calabaza; mantiene los datos que transcribimos del vídeo de Rumel/Turtle.</p>
+  <table><thead><tr><th>Región</th><th>Ciudad</th><th>Visitado</th></tr></thead><tbody>
+   <tr><td>Kanto</td><td>Pueblo Lavanda / Lavender Town</td><td><input class="persist" data-k="pk-kanto" type="checkbox"></td></tr>
+   <tr><td>Hoenn</td><td>Pueblo Pardal / Fallarbor Town</td><td><input class="persist" data-k="pk-hoenn" type="checkbox"></td></tr>
+   <tr><td>Sinnoh</td><td>Pueblo Sosiego / Solaceon Town</td><td><input class="persist" data-k="pk-sinnoh" type="checkbox"></td></tr>
+   <tr><td>Unova</td><td>Ciudad Fayenza / Driftveil City</td><td><input class="persist" data-k="pk-unova" type="checkbox"></td></tr>
+   <tr><td>Johto</td><td>Ciudad Iris / Ecruteak City</td><td><input class="persist" data-k="pk-johto" type="checkbox"></td></tr>
+  </tbody></table>
+  <div class="grid" style="margin-top:14px">
+   <div class="card"><h3>Modo normal</h3><div class="counter"><button class="mini minus" data-c="pkEasy">−</button><b id="pkEasy">0</b><button class="mini plus" data-c="pkEasy">+</button></div><span class="tag">Goodie Bags</span></div>
+   <div class="card"><h3>Modo difícil</h3><div class="counter"><button class="mini minus" data-c="pkHard">−</button><b id="pkHard">0</b><button class="mini plus" data-c="pkHard">+</button></div><span class="tag">Pumpking Goodie Bag</span> <span class="tag">White Lotus Particle</span><p class="muted">Tras el ajuste de la Parte 2, la recompensa de bolsas del modo difícil fue reducida de 5 a 4.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="wisps" class="tab">
+ <div class="card">
+  <h2>🔥 Fuegos fatuos → Spiritomb Alfa</h2>
+  <p>Los wisps estaban repartidos por las cinco regiones. Aquí tienes la lista completa de ubicaciones de 2025 por región, con checklist individual. Las listas se han contrastado con las rutas completas publicadas durante el evento.</p>
+  <div class="regionTabs" id="wispRegion"></div>
+  <div id="wispContent"></div>
+  <div class="notice">Cada región culmina en un Alfa asociado a su ruta de wisps (por ejemplo Gengar en Kanto, Mismagius en Johto, Dusknoir en Hoenn, Drifblim en Sinnoh y Chandelure en Teselia). El <b>Spiritomb Alfa</b> forma parte del contenido especial de Halloween, pero no es el Alfa final de la ruta de wisps de Sinnoh.</div>
+ </div>
+</section>
+
+<section id="pumpcat" class="tab">
+ <div class="card">
+  <h2>🐈 Pumpcat Hunt</h2>
+  <p>En 2025 se añadieron ubicaciones nuevas respecto a 2024. El juego da una pista ambiental; úsala para reducir la búsqueda.</p><div class="guidebox"><h3>📖 Cómo cazar al Pumpcat</h3><ol><li>Activa/busca el Pumpcat y lee la <b>pista ambiental</b> que te da el juego.</li><li>Busca esa pista en la tabla inferior: una misma pista puede corresponder a varias ciudades.</li><li>Viaja entre los candidatos de la región que estés recorriendo y revisa la zona; en 2025 se añadieron posiciones nuevas respecto a 2024.</li><li>Cuando lo encuentres, registra el encuentro con el contador.</li></ol></div><h3>🧭 Pista → lugares posibles</h3><div class="cluegrid"><div class="clue"><b>Sonido de maquinaria metálica</b><p>Ciudad Caoba; Ciudad Portual; Ciudad Algaria; Ciudad Rocavelo; Ciudad Puntaneva; Ciudad Pirita; Ciudad Vetusta; Ciudad Fayenza; Ciudad Teja; Ciudad Mayólica</p></div><div class="clue"><b>Bip Bip Clonk</b><p>Ciudad Caolín; Pueblo Ladrillos; Ciudad Porcelana; Ciudad Mayólica</p></div><div class="clue"><b>Brisa salada</b><p>Ciudad Carmín; Ciudad Celeste; Isla Canela / Islas Sete; Ciudad Trigal; Ciudad Orquídea; Ciudad Olivo; Pueblo Cerezo; Ciudad Algaria; Ciudad Portual; Ciudad Calagua; Pueblo Azuliza; Pueblo Arenisca; Ciudad Pradera; Ciudad Marina; Área de Combate; Área Descanso; Ciudad Canal; Pueblo Arenisca (Teselia); Ciudad Porcelana; Pueblo Arcilla; Ciudad Fayenza</p></div><div class="clue"><b>Murmullo indistinto</b><p>Ciudad Azafrán; Isla 2; Ciudad Azulona; Ciudad Trigal; Ciudad Iris; Ciudad Férrica; Ciudad Rocavelo; Ciudad Jubileo; Ciudad Corazón; Ciudad Porcelana; Ciudad Mayólica; Ciudad Caolín; Pueblo Acuarela</p></div><div class="clue"><b>Presencia aterradora</b><p>Pueblo Lavanda; Ciudad Iris; Pueblo Pardal; Pueblo Sosiego; Ciudad Fayenza</p></div><div class="clue"><b>Sonido de los árboles</b><p>Ciudad Verde; Ciudad Plateada; Ciudad Celeste; Isla 3; Ciudad Azulona; Ciudad Malva; Ciudad Iris; Ciudad Caoba; Pueblo Azalea; Pueblo Primavera; Pueblo Escaso; Ciudad Arrecípolis; Ciudad Petalia; Ciudad Malvalona; Ciudad Algaria; Ciudad Arborada; Pueblo Pardal; Ciudad Férrica; Ciudad Rocavelo; Ciudad Vetusta; Área Supervivencia; Área de Combate; Pueblo Arena; Pueblo Sosiego; Ciudad Fayenza; Ciudad Caolín; Pueblo Ladrillos; Pueblo Acuarela; Pueblo Arcilla; Ciudad Gres</p></div><div class="clue"><b>Grito de un Pokémon raro</b><p>Ciudad Fucsia</p></div><div class="clue"><b>Olor del océano</b><p>Ciudad Carmín; Pueblo Paleta; Pueblo Lavanda; Isla 2; Ciudad Olivo; Pueblo Cerezo; Ciudad Orquídea; Pueblo Primavera; Ciudad Portual; Ciudad Calagua; Ciudad Arrecípolis; Pueblo Azuliza; Ciudad Algaria; Ciudad Malvalona; Pueblo Arena; Ciudad Canal; Ciudad Marina; Área de Combate; Pueblo Arenisca; Ciudad Fayenza; Pueblo Arcilla</p></div><div class="clue"><b>Aroma floral agradable</b><p>Ciudad Plateada; Ciudad Celeste; Ciudad Azulona; Pueblo Paleta; Ciudad Verde; Pueblo Primavera; Pueblo Cerezo; Ciudad Olivo; Ciudad Malva; Pueblo Raíz; Pueblo Verdegal; Ciudad Colosalia; Ciudad Petalia; Ciudad Malvalona; Pueblo Caelestis; Pueblo Aromaflor; Área Supervivencia; Área Descanso; Pueblo Sosiego; Ciudad Pradera; Ciudad Mayólica; Ciudad Gres; Ciudad Fayenza</p></div><div class="clue"><b>Remolinos de aire cálido</b><p>Pueblo Azalea; Pueblo Lavacalda</p></div><div class="clue"><b>Chapoteo en el agua</b><p>Ciudad Verde; Ciudad Fucsia; Ciudad Azulona; Isla 5; Ciudad Endrino; Ciudad Malva; Ciudad Iris; Ciudad Petalia; Ciudad Algaria; Ciudad Colosalia; Ciudad Vetusta; Pueblo Caelestis; Pueblo Hojaverde; Área Descanso; Ciudad Gres; Ciudad Mayólica; Ciudad Teja</p></div><div class="clue"><b>Crujido de madera</b><p>Ciudad Iris; Ciudad Malva; Ciudad Canal; Ciudad Arborada; Ciudad Esmalte</p></div><div class="clue"><b>Ráfaga de aire frío</b><p>Isla Canela; Isla 4; Ciudad Endrino; Ciudad Puntaneva</p></div><div class="clue"><b>El sonido de su llegada resuena</b><p>Ciudad Negra</p></div><div class="clue"><b>Olor a humedad</b><p>Ciudad Pradera; Ciudad Teja; Ciudad Fayenza; Ciudad Esmalte</p></div><div class="clue"><b>Olor a algo delicioso</b><p>Ciudad Azulona; Ciudad Olivo; Ciudad Porcelana; Ciudad Fayenza; Ciudad Esmalte; Ciudad Gres</p></div><div class="clue"><b>Sonido animado de música</b><p>Ciudad Caolín; Pueblo Acuarela; Ciudad Esmalte; Ciudad Mayólica</p></div><div class="clue"><b>Olor podrido</b><p>Ciudad Porcelana; Ciudad Teja</p></div><div class="clue"><b>Risa alegre</b><p>Ciudad Azulona; Pueblo Pardal; Pueblo Sosiego; Ciudad Teja</p></div><div class="clue"><b>Salpicadura fuerte</b><p>Ciudad Azafrán; Ciudad Fucsia; Isla 1; Isla 5; Ciudad Carmín; Ciudad Celeste; Isla Canela; Ciudad Iris; Pueblo Primavera; Ciudad Portual; Pueblo Lavacalda; Ciudad Pradera; Ciudad Canal; Pueblo Hojaverde; Pueblo Arenisca; Ciudad Fayenza; Ciudad Gres</p></div></div>
+  <div class="grid">
+   <div><h3>Encuentros encontrados</h3><div class="counter"><button class="mini minus" data-c="cats">−</button><b id="cats">0</b><button class="mini plus" data-c="cats">+</button></div></div>
+   <div><h3>Pistas frecuentes</h3><p class="muted">Brisa salada · Murmullo indistinto · Presencia aterradora · Sonido de árboles · Olor del océano · Aroma floral · Chapoteo · Crujido de madera · Ráfaga fría · Olor a humedad · Música · Risa · Salpicadura fuerte…</p></div>
+  </div>
+  <details><summary>Ejemplos de pistas confirmadas en la guía comunitaria</summary><p><b>Presencia aterradora:</b> Pueblo Lavanda, Ciudad Iris, Pueblo Pardal, Pueblo Sosiego, Ciudad Fayenza. <b>Remolinos de aire cálido:</b> Pueblo Azalea y Pueblo Lavacalda. <b>Grito de Pokémon raro:</b> Ciudad Fucsia. <b>El sonido de su llegada resuena:</b> Ciudad Negra.</p></details>
+ </div>
+</section>
+
+<section id="raids" class="tab">
+ <div class="card">
+  <h2>⚔️ Halloween Raids 2025</h2>
+  <p>Las <b>7 raids previas</b> del evento fueron Galvantula, Banette, Hypno, Golurk, Scolipede, Mandibuzz y Absol. Al completar el circuito se desbloqueaba el contenido que culminaba en <b>Darkrai</b>.</p>
+<div class="guidebox"><h3>📖 Guía rápida de raids</h3><ol><li>Localiza los dens de Halloween y reúne un grupo preparado para cada jefe.</li><li>Completa las siete raids previas y márcalas abajo; la barra te indica el progreso 7/7.</li><li>No trates a todos los jefes igual: revisa resistencias, inmunidades y mecánicas antes de entrar.</li><li>Tras completar el circuito, pasa al contenido final/especial de <b>Darkrai</b>, que queda separado en este tracker.</li></ol></div>
+  <div class="raidgrid">
+   <div class="raidcard raid-open" onclick="openRaidDetail('galvantula')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/596.png" alt="Galvantula"><span><b>Galvantula</b><small>3 ★ · Bicho / Eléctrico</small></span><input class="raidcheck" data-k="raid1" type="checkbox" onclick="event.stopPropagation()"></div>
+   <div class="raidcard raid-open" onclick="openRaidDetail('banette')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/354.png" alt="Banette"><span><b>Banette</b><small>3 ★ · Fantasma</small></span><input class="raidcheck" data-k="raid2" type="checkbox" onclick="event.stopPropagation()"></div>
+   <div class="raidcard raid-open" onclick="openRaidDetail('hypno')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/97.png" alt="Hypno"><span><b>Hypno</b><small>3 ★ · Psíquico</small></span><input class="raidcheck" data-k="raid3" type="checkbox" onclick="event.stopPropagation()"></div>
+   <div class="raidcard raid-open" onclick="openRaidDetail('golurk')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/623.png" alt="Golurk"><span><b>Golurk</b><small>3 ★ · Tierra / Fantasma</small></span><input class="raidcheck" data-k="raid4" type="checkbox" onclick="event.stopPropagation()"></div>
+   <div class="raidcard raid-open" onclick="openRaidDetail('scolipede')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/545.png" alt="Scolipede"><span><b>Scolipede</b><small>4 ★ · Bicho / Veneno</small></span><input class="raidcheck" data-k="raid5" type="checkbox" onclick="event.stopPropagation()"></div>
+   <div class="raidcard raid-open" onclick="openRaidDetail('mandibuzz')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/630.png" alt="Mandibuzz"><span><b>Mandibuzz</b><small>4 ★ · Siniestro / Volador</small></span><input class="raidcheck" data-k="raid6" type="checkbox" onclick="event.stopPropagation()"></div>
+   <div class="raidcard raid-open" onclick="openRaidDetail('absol')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/359.png" alt="Absol"><span><b>Absol</b><small>4 ★ · Siniestro</small></span><input class="raidcheck" data-k="raid7" type="checkbox" onclick="event.stopPropagation()"></div>
+  </div>
+  <p class="muted">💡 Haz clic sobre cualquier Pokémon para abrir su ficha completa con nivel, tipos, ubicaciones, defensas y estrategia.</p><p>Progreso de raids previas: <b id="raidProg">0/7</b></p><div class="progress"><i id="raidBar"></i></div>
+
+  <div class="darkraiBox raid-open" onclick="openRaidDetail('darkrai')">
+    <div class="darkraiArt"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png" alt="Darkrai"></div>
+    <div>
+      <span class="tag">RAID FINAL / ESPECIAL</span>
+      <h2>🌑 Darkrai</h2>
+      <p>Darkrai regresó como jefe de Halloween. Lo dejamos separado de las siete raids previas para que el progreso quede claro.</p>
+      <label class="task"><input class="raidcheck" data-k="raid-darkrai" type="checkbox" onclick="event.stopPropagation()"><span><b>Darkrai derrotado</b></span></label>
+    </div>
+  </div>
+ </div>
+</section>
+
+<section id="tracker" class="tab">
+ <div class="grid">
+  <div class="card"><h2>📊 Resumen de sesión</h2>
+   <table><tbody>
+    <tr><td>Swarms</td><td id="sumSwarms">0</td></tr><tr><td>Niños</td><td id="sumKids">0</td></tr>
+    <tr><td>Caramelos</td><td id="sumCandies">0</td></tr><tr><td>Minibosses/espíritus</td><td id="sumMini">0</td></tr><tr><td>Pumpking normal</td><td id="sumEasy">0</td></tr>
+    <tr><td>Pumpking difícil</td><td id="sumHard">0</td></tr><tr><td>Pumpcats</td><td id="sumCats">0</td></tr>
+   </tbody></table>
+  </div>
+  <div class="card"><h2>💾 Guardado y gestión</h2><p class="muted">El progreso se guarda automáticamente en este navegador cada vez que marcas una casilla o cambias un contador. También se recuerda la última pestaña abierta.</p><p class="muted" id="saveStatus">✅ Guardado automático activo</p><div class="actions"><button class="btn" id="exportProgress">Exportar copia de progreso</button><label class="btn" for="importProgress" style="display:inline-flex;align-items:center">Importar copia</label><input id="importProgress" type="file" accept="application/json,.json" style="display:none"><button class="btn" id="resetAll">Borrar todo el progreso</button></div></div>
+ </div>
+</section>
+</main>
+
+<div id="raidDetailScreen" class="raidScreen" aria-hidden="true">
+ <div class="raidScreenInner">
+  <button class="raidBack" onclick="closeRaidDetail()">← Volver a las raids</button>
+  <div id="raidDetailContent"></div>
+ </div>
+</div>
+
+<footer>Fan tool no oficial · Datos estructurados a partir del changelog Halloween 2025 y guías/comentarios comunitarios del foro de PokeMMO. Las ubicaciones y mecánicas pueden cambiar en futuras ediciones.</footer>
+
+<script>
+
+const raidDetails={"galvantula": {"popular":[{"name": "Ninetales", "dex": 38, "role": "Sol", "note": "Setter de sol habitual"}, {"name": "Typhlosion", "dex": 157, "role": "Especial", "note": "Daño Fuego bajo sol"}, {"name": "Darmanitan", "dex": 555, "role": "Físico", "note": "Fuego físico muy fuerte"}, {"name": "Chandelure", "dex": 609, "role": "Especial", "note": "Fuego especial"}, {"name": "Krookodile", "dex": 553, "role": "Físico", "note": "Daño de Tierra"}, {"name": "Excadrill", "dex": 530, "role": "Físico", "note": "Tierra físico y resistente"}],"name": "Galvantula", "dex": 596, "stars": 3, "types": ["Bicho", "Eléctrico"], "def": 60, "spdef": 60, "strategy": "Equipo Sol", "attack": "Ataque y/o Ataque Especial", "locations": [["Kanto", "Bosque Verde"], ["Johto", "Calle Victoria (Fuerza)"], ["Hoenn", "Ruta 119"], ["Sinnoh", "Ruta 221 (Surf)"], ["Teselia", "Ruta 2 (Corte)"]]}, "banette": {"popular":[{"name": "Ninetales", "dex": 38, "role": "Sol", "note": "Activa el sol"}, {"name": "Typhlosion", "dex": 157, "role": "Especial", "note": "Atacante Fuego especial"}, {"name": "Chandelure", "dex": 609, "role": "Especial", "note": "Fuego/Fantasma, gran At. Esp."}, {"name": "Volcarona", "dex": 637, "role": "Especial", "note": "Fuego especial"}, {"name": "Houndoom", "dex": 229, "role": "Especial", "note": "Siniestro/Fuego"}, {"name": "Hydreigon", "dex": 635, "role": "Especial", "note": "Daño Siniestro especial"}],"name": "Banette", "dex": 354, "stars": 3, "types": ["Fantasma"], "def": 65, "spdef": 63, "strategy": "Equipo Sol", "attack": "Ataque y/o Ataque Especial", "locations": [["Kanto", "Ruta 7"], ["Johto", "Cueva Oscura (Surf y Destello)"], ["Hoenn", "Ruta 123 (Surf)"], ["Sinnoh", "Ruta 225 (Surf)"], ["Teselia", "Gran Abismo"]]}, "hypno": {"popular":[{"name": "Ninetales", "dex": 38, "role": "Sol", "note": "Soporte para el equipo Sol"}, {"name": "Darmanitan", "dex": 555, "role": "Físico", "note": "Fuego físico"}, {"name": "Krookodile", "dex": 553, "role": "Físico", "note": "Siniestro físico"}, {"name": "Tyranitar", "dex": 248, "role": "Físico", "note": "Siniestro físico"}, {"name": "Scizor", "dex": 212, "role": "Físico", "note": "Bicho físico"}, {"name": "Heracross", "dex": 214, "role": "Físico", "note": "Bicho físico potente"}],"name": "Hypno", "dex": 97, "stars": 3, "types": ["Psíquico"], "def": 70, "spdef": 115, "strategy": "Equipo Sol", "attack": "Ataque", "locations": [["Kanto", "Bosque Baya"], ["Johto", "Ruta 39"], ["Hoenn", "Ruta 117"], ["Sinnoh", "Forja Fuego (Surf)"], ["Teselia", "Solar de los Sueños"]]}, "golurk": {"popular":[{"name": "Pelipper", "dex": 279, "role": "Lluvia", "note": "Setter de lluvia"}, {"name": "Blastoise", "dex": 9, "role": "Especial", "note": "Agua especial"}, {"name": "Kingdra", "dex": 230, "role": "Especial", "note": "Agua bajo lluvia"}, {"name": "Crawdaunt", "dex": 342, "role": "Físico", "note": "Agua físico muy fuerte"}, {"name": "Kabutops", "dex": 141, "role": "Físico", "note": "Agua físico con lluvia"}, {"name": "Ludicolo", "dex": 272, "role": "Especial", "note": "Agua especial con lluvia"}],"name": "Golurk", "dex": 623, "stars": 3, "types": ["Tierra", "Fantasma"], "def": 80, "spdef": 80, "strategy": "Equipo Lluvia (Agua)", "attack": "Ataque y/o Ataque Especial", "locations": [["Kanto", "Calle Victoria"], ["Johto", "Ruinas Alfa"], ["Hoenn", "Cueva Granito"], ["Sinnoh", "Isla Hierro"], ["Teselia", "Montaña Retorcida"]]}, "scolipede": {"popular":[{"name": "Ninetales", "dex": 38, "role": "Sol", "note": "Activa el sol"}, {"name": "Typhlosion", "dex": 157, "role": "Especial", "note": "Fuego especial"}, {"name": "Chandelure", "dex": 609, "role": "Especial", "note": "Fuego especial"}, {"name": "Volcarona", "dex": 637, "role": "Especial", "note": "Fuego especial"}, {"name": "Magmortar", "dex": 467, "role": "Especial", "note": "Atacante Fuego especial"}, {"name": "Darmanitan", "dex": 555, "role": "Físico", "note": "Alternativa física"}],"name": "Scolipede", "dex": 545, "stars": 4, "types": ["Bicho", "Veneno"], "def": 89, "spdef": 69, "strategy": "Equipo Sol", "attack": "Ataque y/o Ataque Especial", "locations": [["Kanto", "Isla 6"], ["Johto", "Encinar"], ["Hoenn", "Ciudad Petalia"], ["Sinnoh", "Bosque Vestigio"], ["Teselia", "Bosque Perdidos"]]}, "mandibuzz": {"popular":[{"name": "Pelipper", "dex": 279, "role": "Lluvia", "note": "Activa la lluvia"}, {"name": "Electivire", "dex": 466, "role": "Físico", "note": "Eléctrico físico"}, {"name": "Magnezone", "dex": 462, "role": "Especial", "note": "Eléctrico especial"}, {"name": "Ampharos", "dex": 181, "role": "Especial", "note": "Eléctrico especial y resistente"}, {"name": "Plusle", "dex": 311, "role": "Especial", "note": "Atacante Eléctrico de raid"}, {"name": "Minun", "dex": 312, "role": "Especial", "note": "Atacante Eléctrico de raid"}],"name": "Mandibuzz", "dex": 630, "stars": 4, "types": ["Siniestro", "Volador"], "def": 105, "spdef": 95, "strategy": "Equipo Lluvia (Eléctrico)", "attack": "Ataque y/o Ataque Especial", "locations": [["Kanto", "Cañón Solano"], ["Johto", "Ruta 46 (Treparrocas)"], ["Hoenn", "Monte Cenizo"], ["Sinnoh", "Ruta 207"], ["Teselia", "Ruta 4"]]}, "absol": {"popular":[{"name": "Mienshao", "dex": 620, "role": "Físico", "note": "Lucha rápido"}, {"name": "Conkeldurr", "dex": 534, "role": "Físico", "note": "Lucha de gran potencia"}, {"name": "Primeape", "dex": 57, "role": "Físico", "note": "Lucha ofensivo"}, {"name": "Heracross", "dex": 214, "role": "Físico", "note": "Lucha/Bicho"}, {"name": "Machamp", "dex": 68, "role": "Físico", "note": "Lucha físico"}, {"name": "Hitmonlee", "dex": 106, "role": "Físico", "note": "Lucha físico rápido"}],"name": "Absol", "dex": 359, "stars": 4, "types": ["Siniestro"], "def": 60, "spdef": 60, "strategy": "Equipo de Lucha", "attack": "Ataque y/o Ataque Especial", "locations": [["Kanto", "Ruta 10"], ["Johto", "Ruta 45"], ["Hoenn", "Ruta 120"], ["Sinnoh", "Ruta 217"], ["Teselia", "Cueva Loza 1F (Destello)"]]}, "darkrai": {"popular":[{"name": "Primeape", "dex": 57, "role": "Lucha", "note": "Usado como lead ofensivo en rutas comunitarias"}, {"name": "Mienshao", "dex": 620, "role": "Lucha", "note": "Lucha rápido y ofensivo"}, {"name": "Conkeldurr", "dex": 534, "role": "Lucha", "note": "Potencia física"}, {"name": "Hitmonlee", "dex": 106, "role": "Lucha", "note": "Atacante físico rápido"}, {"name": "Tyranitar", "dex": 248, "role": "Utilidad", "note": "Aparece en estrategias de Darkrai"}, {"name": "Hydreigon", "dex": 635, "role": "Remate", "note": "Usado para la fase final en rutas conocidas"}, {"name": "Whimsicott", "dex": 547, "role": "Soporte", "note": "Viento Afín / utilidad"}, {"name": "Murkrow", "dex": 198, "role": "Soporte", "note": "Viento Afín / utilidad"}],"name": "Darkrai", "dex": 491, "stars": 4, "types": ["Siniestro"], "def": 90, "spdef": 90, "strategy": "Equipo de Lucha", "attack": "Ataque y/o Ataque Especial", "locations": [["Acceso especial", "Usar Esfera de los sueños para acceder a la Isla Luna Nueva"]]}};
+function openRaidDetail(key){
+ const r=raidDetails[key]; if(!r)return;
+ const stars="★".repeat(r.stars);
+ const locs=r.locations.map(x=>`<div class="locationRow"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
+ document.getElementById("raidDetailContent").innerHTML=`
+  <div class="raidHero">
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${r.dex}.png" alt="${r.name}">
+    <div>
+      <div class="raidStars">${r.stars} ${stars}</div>
+      <h2>${r.name}</h2>
+      <div class="typePills">${r.types.map(t=>`<span>${t}</span>`).join("")}</div>
+    </div>
+  </div>
+  <div class="raidInfoGrid">
+    <div class="raidInfoCard">
+      <h3>📍 Ubicación de la raid</h3>
+      <div class="locationList">${locs}</div>
+    </div>
+    <div class="raidInfoCard">
+      <h3>🛡️ Defensas</h3>
+      <div class="raidStatsBig">
+        <div><b>Defensa</b><strong>${r.def}</strong></div>
+        <div><b>Defensa Especial</b><strong>${r.spdef}</strong></div>
+      </div>
+      <div class="strategyBox"><b>Estrategia de la tabla</b><strong>${r.strategy}</strong></div>
+      <div class="attackBox"><b>Atacar con</b><strong>${r.attack}</strong></div>
+    </div>
+  </div>
+
+  <div class="raidPopular">
+    <h3>👥 Pokémon que suele usar la comunidad</h3>
+    <p class="popularIntro">Opciones habituales y útiles para el arquetipo de esta raid. No forman una composición obligatoria: coordina el clima, el daño físico/especial y los soportes con tu grupo.</p>
+    <div class="popularGrid">${(r.popular||[]).map(p=>`
+      <div class="popularMon">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.dex}.png" alt="${p.name}">
+        <b>${p.name}</b>
+        <small>${p.note}</small>
+        <span class="roleTag">${p.role}</span>
+      </div>`).join("")}
+    </div>
+    <div class="popularWarn">Selección orientativa basada en los arquetipos usados para estas raids y en Pokémon de raid citados/recomendados por la comunidad. Las composiciones concretas pueden variar según la estrategia y el grupo.</div>
+  </div>
+  <p class="raidSource">Datos de la ficha transcritos de la tabla «Incursiones (Raid) de Halloween» proporcionada para esta guía.</p>`;
+ const s=document.getElementById("raidDetailScreen");s.classList.add("open");s.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";s.scrollTop=0;
+}
+function closeRaidDetail(){
+ const s=document.getElementById("raidDetailScreen");s.classList.remove("open");s.setAttribute("aria-hidden","true");document.body.style.overflow="";
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRaidDetail()});
+
+const S=localStorage, counters=["kids","teacher","swarms","candies","miniboss","pkEasy","pkHard","cats"];
+const val=k=>Math.max(0,parseInt(S.getItem("h25-"+k)||"0")||0);
+function setC(k,n){S.setItem("h25-"+k,Math.max(0,n)); render();}
+function render(){
+ counters.forEach(k=>{let e=document.getElementById(k);if(e)e.textContent=val(k)});
+ document.getElementById("balls").textContent=Math.floor(val("kids")/4);
+ document.getElementById("teacherLots").textContent=Math.floor(val("teacher")/5);
+ [["sumSwarms","swarms"],["sumKids","kids"],["sumCandies","candies"],["sumMini","miniboss"],["sumEasy","pkEasy"],["sumHard","pkHard"],["sumCats","cats"]].forEach(([a,b])=>document.getElementById(a).textContent=val(b));
+ updateGoals(); updateRaids();
+}
+document.querySelectorAll(".plus").forEach(b=>b.onclick=()=>setC(b.dataset.c,val(b.dataset.c)+1));
+document.querySelectorAll(".minus").forEach(b=>b.onclick=()=>setC(b.dataset.c,val(b.dataset.c)-1));
+function activateTab(tabId){
+ const target=document.querySelector(`[data-tab="${tabId}"]`), panel=document.getElementById(tabId);
+ if(!target||!panel)return;
+ document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("active"));
+ target.classList.add("active");
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ panel.classList.add("active");
+ S.setItem("h25-active-tab",tabId);
+}
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>activateTab(b.dataset.tab));
+document.querySelectorAll(".persist,.goal,.raidcheck").forEach(x=>{x.checked=S.getItem("h25-"+x.dataset.k)==="1";x.onchange=()=>{S.setItem("h25-"+x.dataset.k,x.checked?"1":"0");render()}});
+function updateGoals(){let a=[...document.querySelectorAll(".goal")],n=a.filter(x=>x.checked).length,p=Math.round(n/a.length*100);document.getElementById("globalPct").textContent=p+"%";document.getElementById("globalBar").style.width=p+"%"}
+function updateRaids(){let a=[...document.querySelectorAll(".raidcheck")].filter(x=>x.dataset.k!=="raid-darkrai"),n=a.filter(x=>x.checked).length;document.getElementById("raidProg").textContent=n+"/7";document.getElementById("raidBar").style.width=(n/7*100)+"%"}
+
+const wispData={"Kanto": ["Ruta 2", "Ruta 25", "Ruta 4", "Ruta 10", "Ruta 12", "Ruta 17", "Ruta 21", "Monte Ascuas / Mt. Ember", "Puente Unión / Bond Bridge", "Ruta 23", "Ruta 9", "Laberinto de Agua / Water Labyrinth", "Ruta 11", "Ruta 13", "Ruta 20", "Playa Tesoro / Treasure Beach", "Cabo Extremo / Cape Brink", "Puerto Isla 3 / Three Island Port", "Valle Ruinas / Ruin Valley", "Ruinas Sete / Tanoby Ruins", "Pilar Recuerdo / Memorial Pillar", "Isla Aislada / Outcast Island"], "Johto": ["Encinar / Ilex Forest", "Ruinas Alfa / Ruins of Alph", "Ruta 45", "Ruta 46", "Ruta 41", "Ruta 47", "Parque Nacional", "Domo Pokéathlon", "Ruta 34", "Ruta 43", "Lago de la Furia", "Ruta 42", "Ruta 38", "Ruta 40", "Ruta 48", "Ruta 26", "Ruta 27", "Ruta 31", "Ruta 32", "Ruta 36", "Ruta 44"], "Hoenn": ["Bosque Petalia", "Monte Cenizo / Mt. Chimney", "Monte Pírico / Mt. Pyre", "Ruta 103", "Ruta 108", "Ruta 109", "Ruta 110", "Ruta 111", "Ruta 114", "Ruta 115", "Ruta 116", "Ruta 119", "Ruta 120", "Ruta 123 · punto 1", "Ruta 124", "Ruta 125", "Ruta 127", "Ruta 130", "Ruta 134", "Pilar Celeste", "Ruta 105", "Ruta 123 · punto 2"], "Sinnoh": ["Isla Hierro", "Ruta 230", "Ruta 204", "Prado Aromaflor", "Bosque Vetusto · exterior", "Ruta 208", "Ruta 203", "Monte Corona", "Ruta 206", "Ruta 212", "Lago Valor", "Ruta 224", "Lago Agudeza", "Ruta 217", "Ruta 210", "Ruta 223", "Ruta 227", "Ruta 225", "Lago Veraz", "Ruta 215", "Fuente Despedida / Sendoff Spring", "Ruta 228"], "Unova": ["Solar de los Sueños / Dreamyard", "Santuario Abundancia", "Zona Desierto / Desert Resort", "Torre Duodraco", "Boquete Gigante", "Bosque de los Perdidos / Lostlorn Forest", "Pantano Teja / Moor of Icirrus", "Bosque Azulejo", "Ruta 3", "Ruta 4", "Ruta 5", "Ruta 6", "Ruta 7", "Ruta 10", "Ruta 11", "Ruta 13", "Ruta 15", "Monte Tuerca", "Bahía Arenisca", "Puente Villa", "Laboratorio P2"]};
+let reg=S.getItem("h25-wreg")||"Kanto";
+function drawWisps(){
+ let rt=document.getElementById("wispRegion");rt.innerHTML="";
+ Object.keys(wispData).forEach(r=>{let b=document.createElement("button");b.textContent=r+" · "+wispData[r].length;b.className=r===reg?"on":"";b.onclick=()=>{reg=r;S.setItem("h25-wreg",r);drawWisps()};rt.appendChild(b)});
+ let arr=wispData[reg], done=arr.filter((_,i)=>S.getItem("h25-wisp-"+reg+"-"+i)==="1").length;
+ document.getElementById("wispContent").innerHTML=`<div class="guidebox"><h3>📖 Ruta de ${reg}</h3><ol><li>Abre la lista de fuegos fatuos del evento y recorre estas zonas una a una.</li><li>Al tocar un fuego fatuo se inicia su encuentro; <b>no necesitas capturar el Pokémon</b> para continuar.</li><li>Marca cada ubicación aquí justo después de completarla.</li><li>Al terminar la región aparece su <b>Alfa final</b>. Completar las regiones forma parte del recorrido de Halloween.</li></ol></div><p><b>${done}/${arr.length}</b> encontrados en ${reg}</p><div class="progress"><i style="width:${done/arr.length*100}%"></i></div><div class="wispChecks">${arr.map((x,i)=>`<label class="wispCheck"><input type="checkbox" data-wi="${i}" ${S.getItem("h25-wisp-"+reg+"-"+i)==="1"?"checked":""}> ${i+1}. ${x}</label>`).join("")}</div>`;
+ document.querySelectorAll("[data-wi]").forEach(x=>x.onchange=()=>{S.setItem("h25-wisp-"+reg+"-"+x.dataset.wi,x.checked?"1":"0");drawWisps()});
+}
+drawWisps();
+
+function restoreLastTab(){
+ const saved=S.getItem("h25-active-tab");
+ if(saved&&document.getElementById(saved)) activateTab(saved);
+}
+
+function exportProgress(){
+ const data={version:1,createdAt:new Date().toISOString(),items:{}};
+ Object.keys(S).filter(k=>k.startsWith("h25-")).forEach(k=>data.items[k]=S.getItem(k));
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob), a=document.createElement("a");
+ a.href=url;
+ a.download="PokeMMO_Halloween_2025_progreso.json";
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ const st=document.getElementById("saveStatus");if(st)st.textContent="✅ Copia de progreso exportada";
+}
+
+document.getElementById("exportProgress").onclick=exportProgress;
+document.getElementById("importProgress").onchange=e=>{
+ const f=e.target.files&&e.target.files[0]; if(!f)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(reader.result);
+   if(!data||typeof data.items!=="object")throw new Error("Formato inválido");
+   Object.entries(data.items).forEach(([k,v])=>{if(k.startsWith("h25-"))S.setItem(k,String(v))});
+   location.reload();
+  }catch(err){alert("No se pudo importar la copia de progreso. Comprueba que sea un archivo exportado por esta herramienta.");}
+ };
+ reader.readAsText(f);
+};
+
+document.getElementById("resetAll").onclick=()=>{if(confirm("¿Borrar todos los contadores y checklists de Halloween 2025?")){Object.keys(S).filter(k=>k.startsWith("h25-")).forEach(k=>S.removeItem(k));location.reload()}};
+render();
+restoreLastTab();
+</script>
+</body></html>

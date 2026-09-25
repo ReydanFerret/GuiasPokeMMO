@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SnowOld · Guía de EVs</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amarillo:#FFCB05;
+    --azul:#3B4CCA;
+    --oscuro:#0c1c30;
+    --panel:#12294a;
+    --panel2:#0e223e;
+    --hielo:#AEEBFF;
+    --hieloOscuro:#5FC9E8;
+    --texto:#eaf8ff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(174,235,255,.15), transparent 40%),
+      radial-gradient(circle at 80% 10%, rgba(95,201,232,.12), transparent 45%),
+      linear-gradient(180deg, #0a1930, var(--oscuro) 60%, #081324);
+    font-family:'Press Start 2P', monospace;
+    color:var(--texto);
+    padding:24px 12px 60px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .nieve{
+    position:fixed;
+    top:-10px;
+    color:#fff;
+    text-shadow:0 0 6px rgba(174,235,255,.8);
+    pointer-events:none;
+    animation:caer linear infinite;
+    z-index:0;
+    user-select:none;
+  }
+  @keyframes caer{
+    to{ transform:translateY(110vh) translateX(var(--deriva,0px)) rotate(360deg); }
+  }
+  h1{
+    color:var(--hielo);
+    text-shadow:3px 3px 0 var(--hieloOscuro), -1px -1px 0 #000, 0 0 12px rgba(174,235,255,.5);
+    font-size:clamp(16px,4vw,26px);
+    text-align:center;
+    margin:0 0 6px;
+    z-index:1;
+    position:relative;
+  }
+  .clan{
+    display:block;
+    width:fit-content;
+    margin:0 auto 26px;
+    font-size:clamp(10px,2.4vw,13px);
+    color:#fff;
+    background:linear-gradient(90deg,var(--hieloOscuro),var(--azul));
+    padding:6px 14px;
+    border-radius:20px;
+    border:2px solid var(--hielo);
+    box-shadow:0 0 10px rgba(174,235,255,.5);
+    letter-spacing:1px;
+    z-index:1;
+    position:relative;
+  }
+  h2{
+    color:var(--hielo);
+    font-size:clamp(12px,2.8vw,16px);
+    text-align:center;
+    margin:40px 0 16px;
+    padding-bottom:8px;
+    border-bottom:3px solid var(--hieloOscuro);
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+    z-index:1;
+  }
+  .contenedor-tabla{
+    max-width:1100px;
+    margin:0 auto;
+    overflow-x:auto;
+    border:3px solid var(--hielo);
+    border-radius:10px;
+    box-shadow:0 4px 0 rgba(0,0,0,.4), 0 0 14px rgba(174,235,255,.15);
+    position:relative;
+    z-index:1;
+    background:var(--panel);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:10px;
+    min-width:520px;
+  }
+  th{
+    background:var(--azul);
+    color:#fff;
+    padding:10px 8px;
+    text-align:center;
+    white-space:nowrap;
+  }
+  td{
+    padding:10px 8px;
+    text-align:center;
+    border-bottom:1px solid rgba(174,235,255,.15);
+    line-height:1.6;
+  }
+  tr:nth-child(even) td{ background:var(--panel2); }
+  .icono{ font-size:16px; }
+  td.icono img{ width:28px; height:28px; object-fit:contain; image-rendering:pixelated; }
+  .vitamina img.icono{ display:block; width:32px; height:32px; margin:0 auto 8px; object-fit:contain; image-rendering:pixelated; }
+  .grid-vitaminas{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:14px;
+    position:relative;
+    z-index:1;
+  }
+  .vitamina{
+    background:var(--panel);
+    border:3px solid var(--hielo);
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+    box-shadow:0 4px 0 rgba(0,0,0,.4);
+  }
+  .vitamina .icono{ display:block; font-size:22px; margin-bottom:8px; }
+  .vitamina b{ display:block; color:var(--hielo); font-size:11px; margin-bottom:6px; }
+  .vitamina span{ font-size:9px; color:#bfe3f5; }
+  table.evs-region{ min-width:1300px; }
+  table.evs-region td:first-child, table.evs-region th:first-child{
+    background:var(--hieloOscuro);
+    color:#04202e;
+    font-weight:bold;
+    white-space:nowrap;
+  }
+  table.evs-region td{ font-size:9px; }
+  .fila-nombre{ font-weight:bold; color:var(--hielo); }
+  footer{
+    text-align:center;
+    margin-top:50px;
+    font-size:10px;
+    color:var(--hielo);
+    position:relative;
+    z-index:1;
+  }
+</style>
+</head>
+<body>
+
+<h1>❄ Guía de EVs ❄</h1>
+<div class="clan">Clan SnowOld</div>
+
+<h2>Reducción de EVs (Bayas)</h2>
+<div class="contenedor-tabla">
+  <table>
+    <tr><th>Icono</th><th>Baya</th><th>Característica que reduce</th></tr>
+    <tr><td class="icono"><img src="iconos/baya-grana.png" alt="Baya Grana"></td><td>Baya Grana</td><td>Puntos de salud</td></tr>
+    <tr><td class="icono"><img src="iconos/baya-algama.png" alt="Baya Algama"></td><td>Baya Algama</td><td>Ataque</td></tr>
+    <tr><td class="icono"><img src="iconos/baya-ispero.png" alt="Baya Ispero"></td><td>Baya Ispero</td><td>Defensa</td></tr>
+    <tr><td class="icono"><img src="iconos/baya-meluce.png" alt="Baya Meluce"></td><td>Baya Meluce</td><td>Ataque especial</td></tr>
+    <tr><td class="icono"><img src="iconos/baya-uvav.png" alt="Baya Uvav"></td><td>Baya Uvav</td><td>Defensa especial</td></tr>
+    <tr><td class="icono"><img src="iconos/baya-tamate.png" alt="Baya Tamate"></td><td>Baya Tamate</td><td>Velocidad</td></tr>
+  </table>
+</div>
+
+<h2>Aumento de EVs (Vitaminas)</h2>
+<div class="grid-vitaminas">
+  <div class="vitamina"><img class="icono" src="iconos/vitamina-hierro.png" alt="Hierro"><b>Hierro</b><span>Aumenta 10 Puntos de Esfuerzo en Defensa</span></div>
+  <div class="vitamina"><img class="icono" src="iconos/vitamina-mas-ps.png" alt="Más PS"><b>Más PS</b><span>Aumenta 10 Puntos de Esfuerzo en PS</span></div>
+  <div class="vitamina"><img class="icono" src="iconos/vitamina-proteina.png" alt="Proteína"><b>Proteína</b><span>Aumenta 10 Puntos de Esfuerzo en Ataque</span></div>
+  <div class="vitamina"><img class="icono" src="iconos/vitamina-calcio.png" alt="Calcio"><b>Calcio</b><span>Aumenta 10 Puntos de Esfuerzo en At. Especial</span></div>
+  <div class="vitamina"><img class="icono" src="iconos/vitamina-zinc.png" alt="Zinc"><b>Zinc</b><span>Aumenta 10 Puntos de Esfuerzo en Def. Especial</span></div>
+  <div class="vitamina"><img class="icono" src="iconos/vitamina-carburante.png" alt="Carburante"><b>Carburante</b><span>Aumenta 10 Puntos de Esfuerzo en Velocidad</span></div>
+</div>
+
+<h2>Farmeo de EVs con hordas (por región)</h2>
+<div class="contenedor-tabla">
+  <table class="evs-region">
+    <tr>
+      <th>EV</th><th>Kanto</th><th>Johto</th><th>Hoenn</th><th>Sinnoh</th><th>Teselia</th>
+    </tr>
+    <tr>
+      <td>VIDA</td>
+      <td>Ruta 14<br>Todo el año<br><span class="fila-nombre">Nidorina/Quagsire</span></td>
+      <td>Cueva Oscura<br>Todo el año<br><span class="fila-nombre">Wobbuffet</span></td>
+      <td>Calle Victoria/Ciudad Petalia/Calle Victoria/Bajo el Agua<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Loudred/Marill/Hariyama/Lanturn</span></td>
+      <td>Ciudad Canal<br>Agua<br><span class="fila-nombre">Gastrodon</span></td>
+      <td>Ciudad Teja/Ruta 6<br>Primavera, Verano y Otoño/Invierno<br><span class="fila-nombre">Stufish/Marill</span></td>
+    </tr>
+    <tr>
+      <td>ATAQUE</td>
+      <td>Ruta 25/Ruta 25/Ruta 24/Ruta 25<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Seaking</span></td>
+      <td>Lago de la Furia<br>Todo el año<br><span class="fila-nombre">Gyarados</span></td>
+      <td>Ruta 119<br>Todo el año<br><span class="fila-nombre">Nuzleaf</span></td>
+      <td>Calle Victoria<br>Cueva<br><span class="fila-nombre">Machoke y Rhydon</span></td>
+      <td>Torre Duodraco/Alm. Frigoríficos/Puente Villa/Torre Duodraco<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Sawsbuck/Herdier/Bibarel/Sawsbuck</span></td>
+    </tr>
+    <tr>
+      <td>DEFENSA</td>
+      <td>Cueva Celeste/Bosque Baya/Ruta 23/Cabo Extremo<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Slowbro</span></td>
+      <td>Poso Slowpoke/Paso Acantilado/Ruta 2<br>Primavera/Verano y Otoño/Invierno<br><span class="fila-nombre">Slowpoke/Slowbro/Sandslash</span></td>
+      <td>Guarida Magma<br>Todo el año<br><span class="fila-nombre">Torkoal</span></td>
+      <td>Ruta 229<br>Todo el año<br><span class="fila-nombre">Pelipper</span></td>
+      <td>Ruta 6/Ruta 12/Castillo Ancestral<br>Primavera/Verano/Otoño e Invierno<br><span class="fila-nombre">Swadloon/Metapod/Cofagrigus</span></td>
+    </tr>
+    <tr>
+      <td>ATA. ESP.</td>
+      <td>Cabo Extremo<br>Todo el año<br><span class="fila-nombre">Golduck</span></td>
+      <td>Ruta 43<br>Todo el año<br><span class="fila-nombre">Girafarig y Flaaffy</span></td>
+      <td>Ruta 121<br>Todo el año<br><span class="fila-nombre">Roselia y Gloom</span></td>
+      <td>Lago Agudeza<br>Agua<br><span class="fila-nombre">Golduck</span></td>
+      <td>Ruta 9/Ruta 11<br>Primavera y Verano/Otoño e Invierno<br><span class="fila-nombre">Duosion/Golduck</span></td>
+    </tr>
+    <tr>
+      <td>DEF. ESP.</td>
+      <td>Isla Canela/Camino Candente/Aquarinto/Camino Candente<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Tentacruel</span></td>
+      <td>Ruta 26<br>Todo el año<br><span class="fila-nombre">Tentacruel</span></td>
+      <td>Frente de Batalla<br>Todo el año<br><span class="fila-nombre">Tentacruel</span></td>
+      <td>Ciudad Marina/Ruta 222/Ruta 226/Ciudad Marina<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Tentacruel/Tentacruel/Dewgong/Tentacruel</span></td>
+      <td>Castillo Ancestral/Ruta 9/Pantano Teja<br>Primavera y Verano/Otoño/Invierno<br><span class="fila-nombre">Claydol/Gothorita/Dewgong</span></td>
+    </tr>
+    <tr>
+      <td>VELOCIDAD</td>
+      <td>Monte Ascuas/Prado Isla Inta/Entrada ala Cañón/Prado Isla Inta<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Rapidash/Skiploom/Persian/Skiploom</span></td>
+      <td>Ruta 28 y Mt. Plateado<br>Todo el año<br><span class="fila-nombre">Poliwhirl</span></td>
+      <td>Ruta 118/Ruta 118/Cascada Meteoro/Ruta 118<br>Primavera/Verano/Otoño/Invierno<br><span class="fila-nombre">Manectric/Linoone/Golbat/Manectric</span></td>
+      <td>Ruta 227 y 228<br>Todo el año<br><span class="fila-nombre">Poliwhirl</span></td>
+      <td>Ruta 1<br>Todo el año<br><span class="fila-nombre">Basculin</span></td>
+    </tr>
+  </table>
+</div>
+
+<footer>❄ SnowOld ❄</footer>
+
+<script>
+function generarNieve(){
+  const copos = "❄❅❆•";
+  const cantidad = 35;
+  for(let i=0;i<cantidad;i++){
+    const copo = document.createElement("span");
+    copo.className = "nieve";
+    copo.textContent = copos[Math.floor(Math.random()*copos.length)];
+    const tam = 10 + Math.random()*18;
+    copo.style.left = Math.random()*100 + "vw";
+    copo.style.fontSize = tam + "px";
+    copo.style.opacity = 0.4 + Math.random()*0.6;
+    copo.style.setProperty("--deriva", (Math.random()*80-40)+"px");
+    const duracion = 8 + Math.random()*10;
+    copo.style.animationDuration = duracion + "s";
+    copo.style.animationDelay = (Math.random()*duracion) + "s";
+    document.body.appendChild(copo);
+  }
+}
+generarNieve();
+</script>
+</body>
+</html>
