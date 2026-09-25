@@ -268,5 +268,134 @@ function updateGymCount() {
 
     var checkedCount = 0;
     checkboxes.forEach(function(checkbox) {
-if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Gimnasios";} else {headingBeforeSection.textContent = "Gimnasios [" + checkedCount + "]";}}function updateEliteFourCount() {var section = document.getElementById('elite-four');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Alto Mando";} else {headingBeforeSection.textContent = "Alto Mando [" + checkedCount + "]";}}function updateTrainerCount() {var section = document.getElementById('trainers');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Entrenadores";} else {headingBeforeSection.textContent = "Entrenadores [" + checkedCount + "]";}}document.addEventListener("DOMContentLoaded", function(event) {//load url paramsconst valsParam = getParameterByName("vals");let vals = [];if(valsParam) {vals = valsParam.split(",");vals.forEach((k,i) => {document.getElementById(k).checked=true;})}const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');var checkedBoxIDs = [];checkedBoxes.forEach((k,i)=> {checkedBoxIDs.push(k.id);})if(checkedBoxes.length!=0){updateTotal();updateGymCount();updateTrainerCount();updateEliteFourCount();}document.querySelector('#gyms').addEventListener('change', () => {updateTotal();updateGymCount();});document.querySelector('#trainers').addEventListener('change', () => {updateTotal();updateTrainerCount();});document.querySelector('#elite-four').addEventListener('change', () => {updateTotal();updateEliteFourCount();});document.querySelector('#charm-form').addEventListener('input', () => {updateTotal();});getItemPrices(items);});function textToLink() {document.querySelector("#link").value = createURL();}function createURL() {const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');let checkedBoxIDs = [];checkedBoxes.forEach((k,i)=> {checkedBoxIDs.push(k.id);});let idstring = checkedBoxIDs.join(",");idstring = idstring.replace("donator,","");idstring = idstring.replace("donator","");let s = window.location.origin+window.location.pathname+"?vals="+idstring;return s;}function getParameterByName(name, url = window.location.href) {name = name.replace(/[[]]/g, '$&');var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),results = regex.exec(url);if (!results) return null;if (!results[2]) return '';return decodeURIComponent(results[2].replace(/+/g, ' '));}function getItemPrices(items){let itemsWithPrices = [];fetch('fiereu.de').then(response => {if (!response.ok) {throw new Error('Network response was not ok');}return response.json();}).then(data => {for (let item of items) {let searchId = item.id;let foundItem = null;let itemPriceArray = data;for (let j = 0; j < itemPriceArray.length; j++) {if (itemPriceArray[j].item_id == searchId) {foundItem = itemPriceArray[j];break;}}if (foundItem) {let price = foundItem.price;item.price = price;itemsWithPrices.push(item);} else {console.log('Objeto no encontrado');}}if (itemsWithPrices.length === items.length) {document.getElementById('amulet-coin-in').value = itemsWithPrices.find(item => item.id === "5223")?.price;document.getElementById('riches-75-in').value = itemsWithPrices.find(item => item.id === "1412")?.price;document.getElementById('riches-100-in').value = itemsWithPrices.find(item => item.id === "1413")?.price;}}).catch(error => {console.error('Hubo un problema con la petición:', error);});}/* ===== Efecto de nieve ===== */function generarNieve(){const copos = "❄❅❆•";const cantidad = 35;for(let i=0;i<cantidad;i++){const copo = document.createElement("span");copo.className = "nieve";copo.textContent = copos[Math.floor(Math.random()*copos.length)];const tam = 10 + Math.random()*18;copo.style.left = Math.random()*100 + "vw";copo.style.fontSize = tam + "px";copo.style.opacity = 0.4 + Math.random()*0.6;copo.style.setProperty("--deriva", (Math.random()*80-40)+"px");const duracion = 8 + Math.random()*10;copo.style.animationDuration = duracion + "s";copo.style.animationDelay = (Math.random()*duracion) + "s";document.body.appendChild(copo);}}generarNieve();
-    })}
+if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Gimnasios";} else {headingBeforeSection.textContent = "Gimnasios [" + checkedCount + "]";}}function updateEliteFourCount() {var section = document.getElementById('elite-four');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Alto Mando";} else {headingBeforeSection.textContent = "Alto Mando [" + checkedCount + "]";}}function updateTrainerCount() {var section = document.getElementById('trainers');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Entrenadores";} else {headingBeforeSection.textContent = "Entrenadores [" + checkedCount + "]";}}document.addEventListener("DOMContentLoaded", function(event) {
+    /* Cargar selecciones desde la URL, si vienen por parámetro ?vals= */
+    const valsParam = getParameterByName("vals");
+    let vals = [];
+    if (valsParam) {
+        vals = valsParam.split(",");
+        vals.forEach((k, i) => {
+            document.getElementById(k).checked = true;
+        });
+    }
+
+    const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+    var checkedBoxIDs = [];
+    checkedBoxes.forEach((k, i) => {
+        checkedBoxIDs.push(k.id);
+    });
+
+    if (checkedBoxes.length != 0) {
+        updateTotal();
+        updateGymCount();
+        updateTrainerCount();
+        updateEliteFourCount();
+    }
+
+    document.querySelector('#gyms').addEventListener('change', () => {
+        updateTotal();
+        updateGymCount();
+    });
+    document.querySelector('#trainers').addEventListener('change', () => {
+        updateTotal();
+        updateTrainerCount();
+    });
+    document.querySelector('#elite-four').addEventListener('change', () => {
+        updateTotal();
+        updateEliteFourCount();
+    });
+    document.querySelector('#charm-form').addEventListener('input', () => {
+        updateTotal();
+    });
+
+    getItemPrices(items);
+});
+
+function textToLink() {
+    const linkInput = document.querySelector("#link");
+    if (linkInput) {
+        linkInput.value = createURL();
+    }
+}
+
+function createURL() {
+    const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+    let checkedBoxIDs = [];
+    checkedBoxes.forEach((k, i) => {
+        checkedBoxIDs.push(k.id);
+    });
+    let idstring = checkedBoxIDs.join(",");
+    idstring = idstring.replace("donator,", "");
+    idstring = idstring.replace("donator", "");
+    let s = window.location.origin + window.location.pathname + "?vals=" + idstring;
+    return s;
+}
+
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+function getItemPrices(items) {
+    let itemsWithPrices = [];
+    fetch('fiereu.de')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            for (let item of items) {
+                let searchId = item.id;
+                let foundItem = null;
+                let itemPriceArray = data;
+                for (let j = 0; j < itemPriceArray.length; j++) {
+                    if (itemPriceArray[j].item_id == searchId) {
+                        foundItem = itemPriceArray[j];
+                        break;
+                    }
+                }
+                if (foundItem) {
+                    let price = foundItem.price;
+                    item.price = price;
+                    itemsWithPrices.push(item);
+                } else {
+                    console.log('Objeto no encontrado');
+                }
+            }
+            if (itemsWithPrices.length === items.length) {
+                document.getElementById('amulet-coin-in').value = itemsWithPrices.find(item => item.id === "5223")?.price;
+                document.getElementById('riches-75-in').value = itemsWithPrices.find(item => item.id === "1412")?.price;
+                document.getElementById('riches-100-in').value = itemsWithPrices.find(item => item.id === "1413")?.price;
+            }
+        })
+        .catch(error => {
+            console.error('Hubo un problema con la petición:', error);
+        });
+}
+
+/* ===== Efecto de nieve ===== */
+function generarNieve() {
+    const copos = "❄❅❆•";
+    const cantidad = 35;
+    for (let i = 0; i < cantidad; i++) {
+        const copo = document.createElement("span");
+        copo.className = "nieve";
+        copo.textContent = copos[Math.floor(Math.random() * copos.length)];
+        const tam = 10 + Math.random() * 18;
+        copo.style.left = Math.random() * 100 + "vw";
+        copo.style.fontSize = tam + "px";
+        copo.style.opacity = 0.4 + Math.random() * 0.6;
+        copo.style.setProperty("--deriva", (Math.random() * 80 - 40) + "px");
+        const duracion = 8 + Math.random() * 10;
+        copo.style.animationDuration = duracion + "s";
+        copo.style.animationDelay = (Math.random() * duracion) + "s";
+        document.body.appendChild(copo);
+    }
+}
+generarNieve();
