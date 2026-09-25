@@ -15,8 +15,10 @@
 }
 
 html, body {
+	background-color: var(--oscuro);
 	background-image: url('bg.jpg');
 	background-repeat: repeat;
+	background-blend-mode: multiply;
 }
 
 body, tr, input {
@@ -68,17 +70,19 @@ body > * { position:relative; z-index:1; }
 
 h2, h3 {
 	margin-top: .5em !important;
-	color: var(--titulo) !important;
+	color: #dff8ff !important;
+	text-shadow: 2px 2px 0 #112b47, -1px -1px 0 rgba(0,0,0,.7), 0 0 12px rgba(174,235,255,.45);
 }
 
 h3 {
 	font-size: 1.25em;
-	color: var(--tituloFuerte) !important;
+	color: #dff8ff !important;
 }
 
 h1, h2 {
-	color: var(--titulo) !important;
+	color: #dff8ff !important;
 	font-weight: bold;
+	text-shadow: 2px 2px 0 #112b47, -1px -1px 0 rgba(0,0,0,.7), 0 0 12px rgba(174,235,255,.45);
 }
 
 label {
@@ -116,7 +120,17 @@ tr {
    queda un hueco de fondo vacío alrededor. */
 .region-card {
 	height: 100%;
+	background: rgba(18, 41, 74, 0.9);
+	border: 2px solid var(--hieloOscuro);
+	border-radius: 12px;
+	box-shadow: 0 0 0 1px rgba(174,235,255,.15), 0 8px 18px rgba(0,0,0,.2);
 }
+
+.region-card h3 {
+	color: #eaf8ff !important;
+	text-shadow: 2px 2px 0 #0d1d34, 0 0 12px rgba(174,235,255,.4);
+}
+
 .region-card table {
 	flex: 1 1 auto;
 }
