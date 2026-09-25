@@ -62,7 +62,7 @@ body > * { position:relative; z-index:1; }
 
 h2, h3{
 	margin-top:.5em !important;
-	color: var(--hielo);
+	color: black !important;
 }
 h3 {
 	font-size:1.25em;
@@ -72,7 +72,7 @@ h1, h2 {
 }
 label {
 	display:block !important;
-	color:#bfe3f5;
+	color:#0a212c;
 }
 tr {
 	margin-top:.5em;
