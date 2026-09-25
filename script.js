@@ -2,6 +2,7 @@ const botones = [
   {nombre:"Red", archivo:"https://reydanferret.github.io/GuiasPokeMMO/RED_By_Flambeo.html"},
   {nombre:"Halloween (info 2025)", archivo:"https://reydanferret.github.io/GuiasPokeMMO/PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html"},
   {nombre:"Evs", archivo:"https://reydanferret.github.io/GuiasPokeMMO/guia-evs-snowold.html"}
+  {nombre:"Amuletos", archivo:"https://reydanferret.github.io/GuiasPokeMMO/Amuleto/index.html"}
 ];
 
 function generarNieve(){
