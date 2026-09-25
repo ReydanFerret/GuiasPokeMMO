@@ -2,13 +2,13 @@
   --amarillo: #FFCB05;
   --azul: #3B4CCA;
   --oscuro: #0c1c30;
-  --panel: #12294a;
-  --panel2: #0e223e;
-  --hielo: #AEEBFF;
-  --hieloOscuro: #5FC9E8;
-  --texto: #eaf8ff;
-  --textoFuerte: #f4fbff;
-  --textoSuave: #d9f3ff;
+  --panel: rgba(12, 22, 35, 0.28);
+  --panel2: rgba(16, 31, 44, 0.18);
+  --hielo: rgba(255, 255, 255, 0.85);
+  --hieloOscuro: #7dd9ff;
+  --texto: #f4fbff;
+  --textoFuerte: #ffffff;
+  --textoSuave: #edf9ff;
 }
 
 * {
@@ -28,7 +28,6 @@ body {
   background-position: center center;
   background-size: cover;
   background-attachment: fixed;
-  background-blend-mode: multiply;
   font-family: 'Press Start 2P', monospace;
   color: var(--texto);
   padding: 24px 12px 60px;
@@ -98,12 +97,13 @@ h2 {
   max-width: 1100px;
   margin: 0 auto;
   overflow-x: auto;
-  border: 3px solid var(--hielo);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 10px;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4), 0 0 14px rgba(174, 235, 255, 0.15);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 0 14px rgba(174, 235, 255, 0.15);
   position: relative;
   z-index: 1;
-  background: var(--panel);
+  background: rgba(10, 18, 30, 0.18);
+  backdrop-filter: blur(1px);
 }
 
 table {
@@ -114,23 +114,23 @@ table {
 }
 
 th {
-  background: var(--azul);
-  color: #fff;
+  background: rgba(24, 48, 82, 0.72);
+  color: #ffffff;
   padding: 10px 8px;
   text-align: center;
   white-space: nowrap;
 }
 
 td {
-  color: var(--textoSuave);
+  color: var(--textoFuerte);
   padding: 10px 8px;
   text-align: center;
-  border-bottom: 1px solid rgba(174, 235, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   line-height: 1.6;
 }
 
 tr:nth-child(even) td {
-  background: var(--panel2);
+  background: rgba(255, 255, 255, 0.02);
   color: var(--textoFuerte);
 }
 
@@ -165,12 +165,12 @@ td.icono img {
 }
 
 .vitamina {
-  background: var(--panel);
-  border: 3px solid var(--hielo);
+  background: rgba(10, 18, 30, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   padding: 14px;
   text-align: center;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .vitamina .icono {
