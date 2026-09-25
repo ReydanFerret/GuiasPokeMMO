@@ -4,9 +4,9 @@ function cargar(){
   const datos = localStorage.getItem(CLAVE);
   if(datos) return JSON.parse(datos);
   return [
-    {nombre:"Red", archivo:"RED_By_Flambeo.html"},
-    {nombre:"Halloween (info 2025)", archivo:"PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html"},
-    {nombre:"Evs", archivo:"guia-evs-snowold.html"}
+    {nombre:"Red", archivo:"https://reydanferret.github.io/GuiasPokeMMO/RED_By_Flambeo.html"},
+    {nombre:"Halloween (info 2025)", archivo:"https://reydanferret.github.io/GuiasPokeMMO/PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html"},
+    {nombre:"Evs", archivo:"https://reydanferret.github.io/GuiasPokeMMO/guia-evs-snowold.html"}
   ];
 }
 
