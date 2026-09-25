@@ -100,7 +100,7 @@ const ELITEFOUR = [
     new Team("eh", "Hoenn", 66000),
     new Team("es", "Sinnoh", 66000),
     new Team("eu", "Teselia", 66000)
-]
+];
 
 
 /* ===== Generación de tablas ===== */
@@ -109,29 +109,29 @@ let regions = [];
 function add_sub_table(region, name) {
     let div = document.querySelector(`#${name}s`);
 
-    // Crear el contenedor de columna para la cuadrícula
+    // Crear el contenedor de la tarjeta (layout tipo masonry vía CSS columns)
     let colWrapper = document.createElement("div");
-    colWrapper.classList.add("col", "mb-3");
+    colWrapper.classList.add("region-card");
 
-    // Crear un contenedor contenedor interno tipo tarjeta compacta
+    // Contenedor interno para dar holgura
     let cardWrapper = document.createElement("div");
-    cardWrapper.classList.add("h-100", "p-1");
+    cardWrapper.classList.add("p-2");
 
-    // Encabezado de la región reducido ligeramente
+    // Encabezado de la región (H3)
     let header = document.createElement("h3");
     header.innerHTML = region;
     header.classList.add("fs-5", "mb-2", "mt-0");
     cardWrapper.appendChild(header);
 
-    // Tabla
+    // Tabla limpia sin 'table-fixed'
     let table = document.createElement("table");
     table.setAttribute("id", `${region.toLowerCase()}-${name}s`);
-    table.classList.add("table", "table-sm", "table-fixed", `${name}-table`, "m-0");
+    table.classList.add("table", "table-sm", "m-0");
     
     if(name == "trainer") {
-        table.innerHTML="<tr><th></th><th>Región</th><th>Entrenador</th><th>Ganancia Base</th></tr>";
+        table.innerHTML="<tr><th></th><th>Ubicación</th><th>Entrenador</th><th>Ganancia</th></tr>";
     } else if (name == "gym") {
-        table.innerHTML="<tr><th></th><th>Ciudad</th><th>Líder</th><th>Ganancia Base</th></tr>";
+        table.innerHTML="<tr><th></th><th>Ciudad</th><th>Líder</th><th>Ganancia</th></tr>";
     }
     
     cardWrapper.appendChild(table);
@@ -141,6 +141,7 @@ function add_sub_table(region, name) {
     regions.push(name+region);
 }
 
+// Función encargada de llenar las filas
 function fill_table(unit, name) {
     if(!regions.includes(name+unit.region)){
         add_sub_table(unit.region, name);
@@ -153,7 +154,7 @@ function fill_table(unit, name) {
     check_input.id = unit.id;
     check_input.name = unit.name;
     check_input.value = unit.profit;
-    check_input.classList.add("form-check-input", "m-0"); // Centrado y sin márgenes rebeldes
+    check_input.classList.add("form-check-input");
     check_cell.appendChild(check_input);
 
     delete unit.region;
@@ -168,16 +169,11 @@ GYMS.forEach(gym => {fill_table(gym, "gym");});
 TRAINERS.forEach(trainer => {fill_table(trainer, "trainer");});
 
 const eliteFourDiv = document.querySelector('#elite-four');
-// Añadimos fila interna al Alto Mando por consistencia de diseño
-let eliteFourRow = document.createElement("div");
-eliteFourRow.classList.add("col-12");
-eliteFourDiv.appendChild(eliteFourRow);
-
 let eliteFourTable = document.createElement("table");
 eliteFourTable.setAttribute("id","elite-four-table");
-eliteFourTable.classList.add("table","table-sm","table-fixed","gym-table","m-0");
+eliteFourTable.classList.add("table","table-sm","table-fixed","gym-table");
 eliteFourTable.innerHTML="<tr><th></th><th>Región</th><th>Ganancia Base</th></tr>";
-eliteFourRow.appendChild(eliteFourTable);
+eliteFourDiv.appendChild(eliteFourTable);
 
 ELITEFOUR.forEach(team =>{
     let eliteFourTable = document.querySelector('#elite-four-table');
@@ -189,7 +185,7 @@ ELITEFOUR.forEach(team =>{
     check_input.id = team.id;
     check_input.name = team.region;
     check_input.value = team.profit;
-    check_input.classList.add("form-check-input", "m-0");
+    check_input.classList.add("form-check-input");
 
     check_cell.appendChild(check_input);
     Object.keys(team).filter(v => v != "id").forEach((k, i) => {
@@ -242,7 +238,7 @@ function updateTotal() {
         eliteFourTotal += parseInt(checkbox.value);
     });
 
-    let donator = ((document.getElementById("donator").checked) ? 1.05 : 1)
+    let donator = ((document.getElementById("donator").checked) ? 1.05 : 1);
 
     let total = (gymTotal+trainerTotal+eliteFourTotal)*donator;
     let amuletCoinTotal = total*1.5-document.getElementById('amulet-coin-in').value;
@@ -269,188 +265,5 @@ function updateGymCount() {
 
     var checkedCount = 0;
     checkboxes.forEach(function(checkbox) {
-        if (checkbox.checked) {
-            checkedCount++;
-        }
-    });
-
-    if(checkedCount==0) {
-        headingBeforeSection.textContent = "Gimnasios";
-    } else {
-        headingBeforeSection.textContent = "Gimnasios [" + checkedCount + "]";
-    }
-}
-function updateEliteFourCount() {
-    var section = document.getElementById('elite-four');
-    var checkboxes = section.querySelectorAll('input[type="checkbox"]');
-    var headingBeforeSection = section.previousElementSibling;
-
-    var checkedCount = 0;
-    checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                    checkedCount++;
-            }
-    });
-
-    if(checkedCount==0) {
-        headingBeforeSection.textContent = "Alto Mando";
-    } else {
-        headingBeforeSection.textContent = "Alto Mando [" + checkedCount + "]";
-    }
-
-}
-function updateTrainerCount() {
-    var section = document.getElementById('trainers');
-    var checkboxes = section.querySelectorAll('input[type="checkbox"]');
-    var headingBeforeSection = section.previousElementSibling;
-
-    var checkedCount = 0;
-    checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                    checkedCount++;
-            }
-    });
-
-    if(checkedCount==0) {
-        headingBeforeSection.textContent = "Entrenadores";
-    } else {
-        headingBeforeSection.textContent = "Entrenadores [" + checkedCount + "]";
-    }
-}
-document.addEventListener("DOMContentLoaded", function(event) {
-    //load url params
-    const valsParam = getParameterByName("vals");
-    let vals = [];
-    if(valsParam) {
-    vals = valsParam.split(",");
-        vals.forEach((k,i) => {
-            document.getElementById(k).checked=true;
-        })
-    }
-
-    const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-    var checkedBoxIDs = [];
-    checkedBoxes.forEach((k,i)=> {
-        checkedBoxIDs.push(k.id);
+if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Gimnasios";} else {headingBeforeSection.textContent = "Gimnasios [" + checkedCount + "]";}}function updateEliteFourCount() {var section = document.getElementById('elite-four');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Alto Mando";} else {headingBeforeSection.textContent = "Alto Mando [" + checkedCount + "]";}}function updateTrainerCount() {var section = document.getElementById('trainers');var checkboxes = section.querySelectorAll('input[type="checkbox"]');var headingBeforeSection = section.previousElementSibling;var checkedCount = 0;checkboxes.forEach(function(checkbox) {if (checkbox.checked) {checkedCount++;}});if(checkedCount==0) {headingBeforeSection.textContent = "Entrenadores";} else {headingBeforeSection.textContent = "Entrenadores [" + checkedCount + "]";}}document.addEventListener("DOMContentLoaded", function(event) {//load url paramsconst valsParam = getParameterByName("vals");let vals = [];if(valsParam) {vals = valsParam.split(",");vals.forEach((k,i) => {document.getElementById(k).checked=true;})}const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');var checkedBoxIDs = [];checkedBoxes.forEach((k,i)=> {checkedBoxIDs.push(k.id);})if(checkedBoxes.length!=0){updateTotal();updateGymCount();updateTrainerCount();updateEliteFourCount();}document.querySelector('#gyms').addEventListener('change', () => {updateTotal();updateGymCount();});document.querySelector('#trainers').addEventListener('change', () => {updateTotal();updateTrainerCount();});document.querySelector('#elite-four').addEventListener('change', () => {updateTotal();updateEliteFourCount();});document.querySelector('#charm-form').addEventListener('input', () => {updateTotal();});getItemPrices(items);});function textToLink() {document.querySelector("#link").value = createURL();}function createURL() {const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');let checkedBoxIDs = [];checkedBoxes.forEach((k,i)=> {checkedBoxIDs.push(k.id);});let idstring = checkedBoxIDs.join(",");idstring = idstring.replace("donator,","");idstring = idstring.replace("donator","");let s = window.location.origin+window.location.pathname+"?vals="+idstring;return s;}function getParameterByName(name, url = window.location.href) {name = name.replace(/[[]]/g, '$&');var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),results = regex.exec(url);if (!results) return null;if (!results[2]) return '';return decodeURIComponent(results[2].replace(/+/g, ' '));}function getItemPrices(items){let itemsWithPrices = [];fetch('fiereu.de').then(response => {if (!response.ok) {throw new Error('Network response was not ok');}return response.json();}).then(data => {for (let item of items) {let searchId = item.id;let foundItem = null;let itemPriceArray = data;for (let j = 0; j < itemPriceArray.length; j++) {if (itemPriceArray[j].item_id == searchId) {foundItem = itemPriceArray[j];break;}}if (foundItem) {let price = foundItem.price;item.price = price;itemsWithPrices.push(item);} else {console.log('Objeto no encontrado');}}if (itemsWithPrices.length === items.length) {document.getElementById('amulet-coin-in').value = itemsWithPrices.find(item => item.id === "5223")?.price;document.getElementById('riches-75-in').value = itemsWithPrices.find(item => item.id === "1412")?.price;document.getElementById('riches-100-in').value = itemsWithPrices.find(item => item.id === "1413")?.price;}}).catch(error => {console.error('Hubo un problema con la petición:', error);});}/* ===== Efecto de nieve ===== */function generarNieve(){const copos = "❄❅❆•";const cantidad = 35;for(let i=0;i<cantidad;i++){const copo = document.createElement("span");copo.className = "nieve";copo.textContent = copos[Math.floor(Math.random()*copos.length)];const tam = 10 + Math.random()*18;copo.style.left = Math.random()*100 + "vw";copo.style.fontSize = tam + "px";copo.style.opacity = 0.4 + Math.random()*0.6;copo.style.setProperty("--deriva", (Math.random()*80-40)+"px");const duracion = 8 + Math.random()*10;copo.style.animationDuration = duracion + "s";copo.style.animationDelay = (Math.random()*duracion) + "s";document.body.appendChild(copo);}}generarNieve();
     })
-    if(checkedBoxes.length!=0){
-        updateTotal();
-        updateGymCount();
-        updateTrainerCount();
-        updateEliteFourCount();
-    }
-
-    document.querySelector('#gyms')
-    .addEventListener('change', () => {
-        updateTotal();
-        updateGymCount();
-    });
-    document.querySelector('#trainers')
-    .addEventListener('change', () => {
-        updateTotal();
-        updateTrainerCount();
-    });
-    document.querySelector('#elite-four')
-    .addEventListener('change', () => {
-        updateTotal();
-        updateEliteFourCount();
-    });
-    document.querySelector('#charm-form')
-    .addEventListener('input', () => {
-        updateTotal();
-    });
-
-    getItemPrices(items);
-});
-
-function textToLink() {
-    document.querySelector("#link").value = createURL();
-}
-
-function createURL() {
-    const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-    let checkedBoxIDs = [];
-    checkedBoxes.forEach((k,i)=> {
-        checkedBoxIDs.push(k.id);
-    });
-
-    let idstring = checkedBoxIDs.join(",");
-    idstring = idstring.replace("donator,","");
-    idstring = idstring.replace("donator","");
-
-    let s = window.location.origin+window.location.pathname+"?vals="+idstring;
-
-    return s;
-}
-
-function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-function getItemPrices(items){
-    let itemsWithPrices = [];
-
-    fetch('https://apis.fiereu.de/pokemmoprices/v1/items')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-            for (let item of items) {
-                let searchId = item.id;
-                let foundItem = null;
-                let itemPriceArray = data;
-                for (let j = 0; j < itemPriceArray.length; j++) {
-                  if (itemPriceArray[j].item_id == searchId) {
-                    foundItem = itemPriceArray[j];
-                    break;
-                  }
-                }
-                if (foundItem) {
-                    let price = foundItem.price;
-                    item.price = price;
-                    itemsWithPrices.push(item);
-                } else {
-                  console.log('Objeto no encontrado');
-                }
-
-            }
-
-                if (itemsWithPrices.length === items.length) {
-                    document.getElementById('amulet-coin-in').value = itemsWithPrices.find(item => item.id === "5223")?.price;
-                    document.getElementById('riches-75-in').value = itemsWithPrices.find(item => item.id === "1412")?.price;
-                    document.getElementById('riches-100-in').value = itemsWithPrices.find(item => item.id === "1413")?.price;
-                }
-      })
-      .catch(error => {
-        console.error('Hubo un problema con la petición:', error);
-      });
-}
-
-/* ===== Efecto de nieve ===== */
-function generarNieve(){
-  const copos = "❄❅❆•";
-  const cantidad = 35;
-  for(let i=0;i<cantidad;i++){
-    const copo = document.createElement("span");
-    copo.className = "nieve";
-    copo.textContent = copos[Math.floor(Math.random()*copos.length)];
-    const tam = 10 + Math.random()*18;
-    copo.style.left = Math.random()*100 + "vw";
-    copo.style.fontSize = tam + "px";
-    copo.style.opacity = 0.4 + Math.random()*0.6;
-    copo.style.setProperty("--deriva", (Math.random()*80-40)+"px");
-    const duracion = 8 + Math.random()*10;
-    copo.style.animationDuration = duracion + "s";
-    copo.style.animationDelay = (Math.random()*duracion) + "s";
-    document.body.appendChild(copo);
-  }
-}
-generarNieve();
