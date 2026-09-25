@@ -61,6 +61,7 @@ body, tr, input {
 	text-align:center;
 }
 
+/* ===== Mantiene el Efecto de Nieve Intacto ===== */
 .nieve{
 	position:fixed;
 	top:-10px;
@@ -94,35 +95,47 @@ label {
 tr {
 	margin-top:.5em;
 }
-td, tr {
-	width:20%;
-}
 
+/* ===== Corrección de las Tablas y Tarjetas Compactas ===== */
 table {
 	background-color: var(--panel) !important;
 	border: 2px solid var(--hieloOscuro);
 	border-radius: 8px;
 	overflow: hidden;
+	width: 100% !important; /* Fuerza a la tabla a llenar el ancho de su columna flex */
 }
 table th {
 	background-color: var(--azul) !important;
 	color: #fff !important;
 	border-color: var(--hieloOscuro) !important;
+	font-size: 0.85rem;
+	padding: 6px 4px !important;
 }
 table td {
 	background-color: var(--panel) !important;
 	color: #eaf8ff !important;
 	border-color: rgba(174,235,255,.15) !important;
+	vertical-align: middle; /* Centrado vertical para alinearse con los checkbox */
+	font-size: 0.85rem;
+	padding: 4px 6px !important;
 }
 table tr:nth-child(even) td {
 	background-color: var(--panel2) !important;
 	color: #eaf8ff !important;
 }
 
+/* Ajuste específico para que la primera celda del checkbox sea pequeña */
+table td:first-child, table th:first-child {
+	width: 40px;
+	text-align: center;
+}
+
+/* ===== Formulario y Checkboxes Alineados ===== */
 .form-check-input {
-	height:1.5em;
-	width:1.5em;
-	margin-right:1em;
+	height: 1.2em;
+	width: 1.2em;
+	margin: 0 auto !important; /* Centra perfectamente el cuadro dentro de su celda */
+	display: block;
 }
 .form-control {
 	max-width:200px;

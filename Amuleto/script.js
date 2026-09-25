@@ -107,21 +107,38 @@ const ELITEFOUR = [
 
 let regions = [];
 function add_sub_table(region, name) {
-    let div = document.querySelector(`#${name}s`)
+    let div = document.querySelector(`#${name}s`);
+
+    // Crear el contenedor de columna para la cuadrícula
+    let colWrapper = document.createElement("div");
+    colWrapper.classList.add("col", "mb-3");
+
+    // Crear un contenedor contenedor interno tipo tarjeta compacta
+    let cardWrapper = document.createElement("div");
+    cardWrapper.classList.add("h-100", "p-1");
+
+    // Encabezado de la región reducido ligeramente
     let header = document.createElement("h3");
     header.innerHTML = region;
-    div.appendChild(header);
+    header.classList.add("fs-5", "mb-2", "mt-0");
+    cardWrapper.appendChild(header);
 
+    // Tabla
     let table = document.createElement("table");
-    table.setAttribute("id",`${region.toLowerCase()}-${name}s`)
-    table.classList.add("table","table-sm","table-fixed",`${name}-table`)
+    table.setAttribute("id", `${region.toLowerCase()}-${name}s`);
+    table.classList.add("table", "table-sm", "table-fixed", `${name}-table`, "m-0");
+    
     if(name == "trainer") {
         table.innerHTML="<tr><th></th><th>Región</th><th>Entrenador</th><th>Ganancia Base</th></tr>";
     } else if (name == "gym") {
         table.innerHTML="<tr><th></th><th>Ciudad</th><th>Líder</th><th>Ganancia Base</th></tr>";
     }
+    
+    cardWrapper.appendChild(table);
+    colWrapper.appendChild(cardWrapper);
+    div.appendChild(colWrapper);
+    
     regions.push(name+region);
-    div.appendChild(table);
 }
 
 function fill_table(unit, name) {
@@ -136,7 +153,7 @@ function fill_table(unit, name) {
     check_input.id = unit.id;
     check_input.name = unit.name;
     check_input.value = unit.profit;
-    check_input.classList.add("form-check-input");
+    check_input.classList.add("form-check-input", "m-0"); // Centrado y sin márgenes rebeldes
     check_cell.appendChild(check_input);
 
     delete unit.region;
@@ -151,11 +168,16 @@ GYMS.forEach(gym => {fill_table(gym, "gym");});
 TRAINERS.forEach(trainer => {fill_table(trainer, "trainer");});
 
 const eliteFourDiv = document.querySelector('#elite-four');
+// Añadimos fila interna al Alto Mando por consistencia de diseño
+let eliteFourRow = document.createElement("div");
+eliteFourRow.classList.add("col-12");
+eliteFourDiv.appendChild(eliteFourRow);
+
 let eliteFourTable = document.createElement("table");
-eliteFourTable.setAttribute("id","elite-four-table")
-eliteFourTable.classList.add("table","table-sm","table-fixed","gym-table")
+eliteFourTable.setAttribute("id","elite-four-table");
+eliteFourTable.classList.add("table","table-sm","table-fixed","gym-table","m-0");
 eliteFourTable.innerHTML="<tr><th></th><th>Región</th><th>Ganancia Base</th></tr>";
-eliteFourDiv.appendChild(eliteFourTable);
+eliteFourRow.appendChild(eliteFourTable);
 
 ELITEFOUR.forEach(team =>{
     let eliteFourTable = document.querySelector('#elite-four-table');
@@ -164,11 +186,10 @@ ELITEFOUR.forEach(team =>{
     let check_input = document.createElement("input");
 
     check_input.type = "checkbox";
-
     check_input.id = team.id;
     check_input.name = team.region;
     check_input.value = team.profit;
-    check_input.classList.add("form-check-input");
+    check_input.classList.add("form-check-input", "m-0");
 
     check_cell.appendChild(check_input);
     Object.keys(team).filter(v => v != "id").forEach((k, i) => {
@@ -177,6 +198,7 @@ ELITEFOUR.forEach(team =>{
         cell.appendChild(text);
     });
 });
+
 
 /* ===== Lógica de cálculo y eventos ===== */
 class Item {
