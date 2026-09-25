@@ -8,31 +8,6 @@
 	--hieloOscuro:#5FC9E8;
 }
 
-.float-contianer {
-	max-width: 1400px;
-	margin: 0 auto;
-	position: relative;
-}
-
-@media screen and (min-width: 600px) {
-	.float-child {
-		padding: 20px;
-	}
-	#calc {
-		position: fixed;
-		width:326px;
-		/* Si la pantalla es más ancha que el contenedor centrado (1400px),
-		   este cálculo empuja el panel fijo para que quede centrado junto
-		   con el resto del contenido en vez de pegado al borde izquierdo. */
-		left: max(0px, calc((100vw - 1400px) / 2));
-	}
-	#data {
-		float: right;
-		width:100%;
-		padding-left:326px;
-	}
-}
-
 html, body {
 	background:
 		radial-gradient(circle at 20% 0%, rgba(174,235,255,.15), transparent 40%),
@@ -86,7 +61,7 @@ body, tr, input {
 	to{ transform:translateY(110vh) translateX(var(--deriva,0px)) rotate(360deg); }
 }
 
-.float-contianer, #calc, #data{ position:relative; z-index:1; }
+body > * { position:relative; z-index:1; }
 
 h2, h3{
 	margin-top:.5em !important;
@@ -106,20 +81,35 @@ tr {
 	margin-top:.5em;
 }
 
-/* ===== Tarjetas de región, una al lado de la otra, sin superponerse =====
-   Se arma con CSS Grid: cada tarjeta ocupa su propia celda de una grilla que
-   calcula sola cuántas columnas entran según el ancho disponible (auto-fill).
-   A diferencia de un layout de columnas (column-count), acá cada tarjeta
-   respeta su fila y columna reales, por lo que nunca puede quedar dibujada
-   encima de otra, sea cual sea su alto. */
-.region-columns {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 1rem;
-	align-items: start;
+/* ===== Panel de "Costo del Amuleto" / "Totales" =====
+   Ya no es un sidebar fijo pegado al costado: es un bloque normal,
+   centrado en la página con Bootstrap (row justify-content-center +
+   col-lg-8 col-xl-6), con su propio fondo/borde para que se vea como
+   un panel bien definido y no "perdido" en la pantalla. */
+.calc-panel {
+	background-color: var(--panel);
+	border: 2px solid var(--hieloOscuro);
+	border-radius: 10px;
+	padding: 24px;
+	margin-bottom: 2rem;
 }
+.calc-panel h3 {
+	font-size: 1.15rem;
+}
+
+/* ===== Tarjetas de región, una al lado de la otra, sin superponerse =====
+   Layout 100% Bootstrap: .row + col-12/col-sm-6/col-lg-4. Bootstrap ya
+   estira automáticamente todas las columnas de una misma fila a la
+   altura de la más alta (align-items: stretch, por defecto en .row).
+   Por eso alcanza con que la tarjeta interna tenga h-100 y la tabla
+   "flex-grow-1": así, aunque una región tenga menos ciudades que la
+   de al lado, su tarjeta ocupa igual toda la altura de la fila y no
+   queda un hueco de fondo vacío alrededor. */
 .region-card {
-	min-width: 0; /* evita que una tabla ancha rompa el ancho de la celda */
+	height: 100%;
+}
+.region-card table {
+	flex: 1 1 auto;
 }
 
 /* ===== Corrección de las Tablas y Tarjetas Compactas ===== */
@@ -128,7 +118,7 @@ table {
 	border: 2px solid var(--hieloOscuro);
 	border-radius: 8px;
 	overflow: hidden;
-	width: 100% !important; /* Fuerza a la tabla a llenar el ancho de su columna flex */
+	width: 100% !important; /* Fuerza a la tabla a llenar el ancho de su columna */
 }
 table th {
 	background-color: var(--azul) !important;

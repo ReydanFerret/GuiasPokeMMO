@@ -109,13 +109,16 @@ let regions = [];
 function add_sub_table(region, name) {
     let div = document.querySelector(`#${name}s`);
 
-    // Crear el contenedor de la tarjeta (layout tipo masonry vía CSS columns)
+    // Columna de Bootstrap: 1 por fila en mobile, 2 en tablet, 3 en desktop.
+    // Bootstrap ya estira todas las columnas de una misma fila a la altura
+    // de la más alta, así que ninguna tarjeta queda "corta".
     let colWrapper = document.createElement("div");
-    colWrapper.classList.add("region-card");
+    colWrapper.classList.add("col-12", "col-sm-6", "col-lg-4");
 
-    // Contenedor interno para dar holgura
+    // Tarjeta interna: ocupa toda la altura de la columna (ver .region-card
+    // en styles.css) para que no quede un hueco vacío al lado de otra región.
     let cardWrapper = document.createElement("div");
-    cardWrapper.classList.add("p-2");
+    cardWrapper.classList.add("region-card", "d-flex", "flex-column", "p-2");
 
     // Encabezado de la región (H3)
     let header = document.createElement("h3");

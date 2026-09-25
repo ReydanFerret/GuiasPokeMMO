@@ -11,51 +11,47 @@
 </head>
 <body>
 
+<div class="container py-4">
+
 <h1 class="titulo-principal"><span class="pokebola"></span>Calculadora de Amuletos</h1>
 <div class="clan">❄ Clan SnowOld ❄</div>
 
-<div class="float-contianer">
-
-<div id="calc" class="float-child">
-<div class="row">
-    <form id="charm-form">
-    <h2>Costo del Amuleto</h2>
-        <p class="gtl-note">⚠ Cargá a mano los precios actuales del <strong>GTL</strong> para cada amuleto (Moneda Amuleto, Riqueza 75% y 100%): si los valores están mal la calculadora no va a dar un resultado correcto.</p>
-        <label>Moneda Amuleto:</label><input class="form-control" type="text" id="amulet-coin-in" value="17000"><br>
-        <label>Riquezas 75%:</label><input class="form-control" type="text" id="riches-75-in" value="65000"><br>
-        <label>Riquezas 100%:</label><input class="form-control" type="text" id="riches-100-in" value="140000"><br>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="donator">
-            <label class="form-check-label" for="donator">Donador 5%</label>
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8 col-xl-6">
+        <div id="calc" class="calc-panel">
+            <form id="charm-form">
+            <h2>Costo del Amuleto</h2>
+                <p class="gtl-note">⚠ Cargá a mano los precios actuales del <strong>GTL</strong> para cada amuleto (Moneda Amuleto, Riquezas 75% y 100%): la actualización automática puede fallar o venir desactualizada, y si los valores están mal la calculadora no va a dar un resultado correcto.</p>
+                <label>Moneda Amuleto:</label><input class="form-control" type="text" id="amulet-coin-in" value="17000"><br>
+                <label>Riquezas 75%:</label><input class="form-control" type="text" id="riches-75-in" value="65000"><br>
+                <label>Riquezas 100%:</label><input class="form-control" type="text" id="riches-100-in" value="140000"><br>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="donator">
+                    <label class="form-check-label" for="donator">Donador 5%</label>
+                </div>
+            </form>
+            <hr>
+            <h2>Totales</h2>
+            <h3 id="no-charm">Sin amuleto: </h3>
+            <h3 id="amulet-coin">Moneda Amuleto: </h3>
+            <h3 id="riches-75">Amuleto Riqueza 75%: </h3>
+            <h3 id="riches-100">Amuleto Riqueza 100%: </h3>
         </div>
-    </form>
+    </div>
 </div>
-<div class="row">
-    <h2>Totales</h2>
-    <h3 id="no-charm">Sin amuleto: </h3>
-    <h3 id="amulet-coin">Moneda Amuleto: </h3>
-    <h3 id="riches-75">Amuleto Riqueza 75%: </h3>
-    <h3 id="riches-100">Amuleto Riqueza 100%: </h3>
-</div>
-<hr>
 
-
-<div id="data" class="float-child">
-<div class="row">
+<div id="data">
     <h2>Gimnasios</h2>
-    <div id="gyms" class="region-columns">
+    <div id="gyms" class="row g-3">
     </div>
-</div>
-<div class="row">
-    <h2>Entrenadores</h2>
-    <div id="trainers" class="region-columns">
+
+    <h2 class="mt-4">Entrenadores</h2>
+    <div id="trainers" class="row g-3">
     </div>
-</div>
-<div class="row">
-    <h2>Alto Mando</h2>
+
+    <h2 class="mt-4">Alto Mando</h2>
     <div id="elite-four">
     </div>
-</div>
 </div>
 
 </div>
