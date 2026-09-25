@@ -62,17 +62,19 @@ body > * { position:relative; z-index:1; }
 
 h2, h3{
 	margin-top:.5em !important;
-	color: black !important;
+	color: --var(--hielo) !important;
 }
 h3 {
 	font-size:1.25em;
 }
 h1, h2 {
+	color: var(--hieloOscuro) !important;
 	font-weight: bold;
+
 }
 label {
 	display:block !important;
-	color:#0a212c;
+	color:#2790c0;
 }
 tr {
 	margin-top:.5em;
