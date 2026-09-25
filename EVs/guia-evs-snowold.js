@@ -1,0 +1,23 @@
+function generarNieve() {
+  const copos = "❄❅❆•";
+  const cantidad = 35;
+
+  for (let i = 0; i < cantidad; i++) {
+    const copo = document.createElement("span");
+    copo.className = "nieve";
+    copo.textContent = copos[Math.floor(Math.random() * copos.length)];
+
+    const tam = 10 + Math.random() * 18;
+    copo.style.left = Math.random() * 100 + "vw";
+    copo.style.fontSize = tam + "px";
+    copo.style.opacity = 0.4 + Math.random() * 0.6;
+    copo.style.setProperty("--deriva", (Math.random() * 80 - 40) + "px");
+
+    const duracion = 8 + Math.random() * 10;
+    copo.style.animationDuration = duracion + "s";
+    copo.style.animationDelay = (Math.random() * duracion) + "s";
+    document.body.appendChild(copo);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", generarNieve);
