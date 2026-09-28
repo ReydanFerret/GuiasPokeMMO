@@ -3,7 +3,7 @@ const botones = [
   { nombre: "Halloween (info 2025)", archivo: "spookyseason/PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html" },
   { nombre: "Evs", archivo: "EVs/guia-evs-snowold.html" },
   { nombre: "Amuletos", archivo: "Amuleto/amuleto.html" },
-  { nombre: "Crianza simulador", archivo: "Crianza/index.html" }
+  { nombre: "Crianza simulador", archivo: "Crianza/crianza.html" }
 ];
 
 function generarNieve() {
