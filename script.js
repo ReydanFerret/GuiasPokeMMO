@@ -45,7 +45,7 @@ function render() {
   botones.forEach((b) => {
     const tarjeta = document.createElement("div");
 
-    tarjeta.className = "tarjeta";
+    tarjeta.className = "tarjeta col-12 col-sm-6 col-lg-4";
 
     tarjeta.innerHTML = `
       <a class="btn ir" href="${escapeHtml(b.archivo)}">

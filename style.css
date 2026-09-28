@@ -64,14 +64,22 @@ h1{
   text-align:center;
   z-index:1;
 }
+.container{
+  max-width:1180px;
+}
 #contenedor{
   width:100%;
-  max-width:640px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  max-width:980px;
+  margin:0 auto;
+  display:flex;
+  flex-wrap:wrap;
   gap:14px;
+  z-index:1;
 }
-#contenedor{ z-index:1; }
+#contenedor > .tarjeta{
+  flex: 1 1 240px;
+  max-width: 100%;
+}
 .tarjeta{
   background:var(--panel);
   border:3px solid var(--hielo);
@@ -81,6 +89,7 @@ h1{
   flex-direction:column;
   gap:8px;
   box-shadow:0 4px 0 rgba(0,0,0,.4), 0 0 14px rgba(174,235,255,.15);
+  min-height:100%;
 }
 .btn{
   font-family:inherit;
@@ -90,9 +99,31 @@ h1{
   border-radius:6px;
   cursor:pointer;
   transition:transform .1s ease;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
 }
 .btn:active{transform:scale(.95);}
 .ir{background:var(--hieloOscuro);color:#04202e;}
+@media (max-width: 576px) {
+  body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .subtitulo {
+    font-size: 9px;
+    padding: 0 8px;
+    line-height: 1.6;
+  }
+  .clan {
+    padding: 8px 12px;
+  }
+  .tarjeta {
+    padding: 12px;
+  }
+}
 .pokebola{
   width:26px;height:26px;border-radius:50%;
   background:linear-gradient(var(--hieloOscuro) 50%, #fff 50%);
