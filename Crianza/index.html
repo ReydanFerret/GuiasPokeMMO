@@ -1,0 +1,390 @@
+<!DOCTYPE html><html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnowOld · Planificador de Crianza PokeMMO</title>
+  <link rel="icon" type="image/svg+xml" href="fonts/favicon-egg.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=Fraunces:opsz,wght@9..144,600&amp;family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-orb orb-a" aria-hidden="true"></div>
+  <div class="bg-orb orb-b" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <header class="hero">
+      <h1><span class="pokebola-mini"></span>Planificador de Crianza</h1>
+      <div class="clan-snowold">❄ Clan SnowOld ❄</div>
+      <p class="subtitle">
+        Agregá los Pokémon que querés criar y generá un plan paso a paso con un mapa visual de dependencias.
+      </p>
+      <div class="hero-actions">
+        <button id="settingsToggle" class="ghost-btn" type="button" aria-label="Abrir panel de configuración">Costos y Configuración</button>
+        <div class="hero-action-with-tooltip">
+          <button id="mobileQuickModeToggle" class="ghost-btn" type="button" aria-label="Activar modo rápido">Activar Modo Rápido</button>
+          <details class="plan-mode-tooltip">
+            <summary aria-label="Ayuda del modo rápido">?</summary>
+            <div class="plan-mode-tooltip__content">
+              <strong>Modo Rápido</strong>
+              <p>Optimiza la página para celular, enfocándose en la lista de compras y el flujo principal de planificación.</p>
+              <p>Oculta o minimiza paneles extra como Lista de Compras, Ítems Necesarios, Explicar mi Plan y otras secciones secundarias.</p>
+              <p>También cambia automáticamente a la vista de Lista de Compras y mantiene el diseño compacto para pantallas chicas.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel input-panel">
+      <details class="panel-toggle" open="">
+        <summary class="panel-summary"><h2>Agregar Objetivo</h2></summary>
+        <div class="panel-body">
+          <div class="input-grid">
+            <div class="species-field-wrap">
+              <label>
+                Especie
+                <select id="speciesInput">
+                  <option value="">Elegí una especie</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Naturaleza
+              <select id="natureInput"></select>
+            </label>
+          </div>
+
+          <div id="speciesMeta" class="species-meta empty">Elegí una especie para cargar automáticamente sus grupos huevo y proporción de género.</div>
+
+          <fieldset class="ivs-fieldset">
+            <legend>IVs Perfectos Requeridos (31)</legend>
+            <div id="ivChecklist" class="iv-grid"></div>
+          </fieldset>
+
+          <button id="addTargetBtn" class="primary-btn" type="button">Agregar Objetivo</button>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <details class="panel-toggle" open="">
+        <summary class="panel-summary">
+          <span class="panel-summary-title"><h2>Objetivos</h2></span>
+          <div class="panel-summary-actions">
+            <input id="targetImportInput" type="file" accept="application/json,.json" hidden="">
+            <button id="importTargetsBtn" class="ghost-btn" type="button">Importar JSON</button>
+            <button id="exportTargetsBtn" class="ghost-btn" type="button">Exportar JSON</button>
+            <button id="clearTargetsBtn" class="ghost-btn" type="button">Limpiar</button>
+          </div>
+        </summary>
+        <div class="panel-body">
+          <div id="targetsList" class="targets-list"></div>
+          <div class="generate-plan-controls">
+            <button id="generatePlanBtn" class="primary-btn" type="button">Generar Plan</button>
+            <label class="generate-plan-profile-label">
+              Generar Como
+              <select id="generatePlanProfile"></select>
+            </label>
+            <details class="plan-mode-tooltip">
+              <summary aria-label="Ayuda de modos de plan">?</summary>
+              <div class="plan-mode-tooltip__content">
+                <strong>Modos de Plan</strong>
+                <p><strong>Usar Inventario (Balanceado):</strong> Usa el inventario propio cuando conviene y mantiene el comportamiento normal del planificador.</p>
+                <p><strong>Costo Más Bajo (Auto):</strong> Elige automáticamente el resultado más barato entre el modo balanceado y el que ignora el inventario.</p>
+                <p><strong>Ignorar Inventario:</strong> Trata a todos los reproductores como compras de mercado e ignora el inventario propio.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="inventorySection" class="panel">
+      <details class="panel-toggle" open="">
+        <summary class="panel-summary">
+          <span class="panel-summary-title"><h2>Inventario Propio</h2></span>
+          <div class="panel-summary-actions">
+            <input id="inventoryImportInput" type="file" accept="application/json,.json" hidden="">
+            <input id="inventoryPokeMMOImportInput" type="file" accept="application/json,.json" hidden="">
+            <button id="importInventoryBtn" class="ghost-btn" type="button">Importar</button>
+            <button id="exportInventoryBtn" class="ghost-btn" type="button">Exportar JSON</button>
+            <button id="clearInventoryBtn" class="ghost-btn" type="button">Limpiar</button>
+          </div>
+        </summary>
+        <div class="panel-body">
+          <p class="hint">Agregá Pokémon propios con el mismo flujo que los objetivos, más selección de género.</p>
+          <div class="input-grid">
+            <label>
+              Especie
+              <input id="inventorySpeciesInput" type="text" placeholder="Empezá a escribir el nombre de un Pokémon">
+            </label>
+            <label>
+              Naturaleza
+              <select id="inventoryNatureInput"></select>
+            </label>
+            <label>
+              Género
+              <select id="inventoryGenderInput">
+                <option value="Any">Cualquiera</option>
+                <option value="Male">Macho</option>
+                <option value="Female">Hembra</option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset class="ivs-fieldset">
+            <legend>IVs Perfectos Propios (31)</legend>
+            <div id="inventoryIvChecklist" class="iv-grid"></div>
+          </fieldset>
+
+          <button id="addInventoryBtn" class="primary-btn" type="button">Agregar al Inventario</button>
+
+          <div id="inventoryList" class="targets-list"></div>
+          <div id="inventorySummary" class="species-meta empty">No hay inventario cargado. El planificador asumirá que hay que conseguir todos los reproductores.</div>
+        </div>
+      </details>
+    </section>
+
+    <section id="inventoryImportModal" class="inventory-import-modal" hidden="">
+      <article class="inventory-import-modal__card">
+        <h3>Importar Inventario Propio</h3>
+        <div class="inventory-import-modal__tabs" role="tablist" aria-label="Tipo de importación de inventario">
+          <button id="inventoryImportBreederTab" class="inventory-import-modal__tab is-active" type="button" role="tab" aria-selected="true" aria-controls="inventoryImportBreederPanel">Reproductor</button>
+          <button id="inventoryImportPokePasteTab" class="inventory-import-modal__tab" type="button" role="tab" aria-selected="false" aria-controls="inventoryImportPokePastePanel">PokePaste</button>
+          <button id="inventoryImportPokeMMOTab" class="inventory-import-modal__tab" type="button" role="tab" aria-selected="false" aria-controls="inventoryImportPokeMMOPanel">PokeMMO</button>
+        </div>
+        <div id="inventoryImportBreederPanel" class="inventory-import-modal__panel" role="tabpanel">
+          <label class="inventory-import-modal__override">
+            <input type="checkbox" id="inventoryImportBreederOverrideChk" checked="">
+            Sobrescribir inventario existente
+          </label>
+          <button id="inventoryImportJsonOptionBtn" class="primary-btn" type="button">Importar desde JSON</button>
+        </div>
+        <div id="inventoryImportPokePastePanel" class="inventory-import-modal__panel" role="tabpanel" hidden="">
+          <label class="inventory-import-modal__override">
+            <input type="checkbox" id="inventoryImportPokePasteOverrideChk" checked="">
+            Sobrescribir inventario existente
+          </label>
+          <label for="inventoryPokepasteInput">Pegá el texto de PokePaste</label>
+          <textarea id="inventoryPokepasteInput" rows="10" placeholder="Walrein (M)
+Ability: Ice Body
+Level: 57
+EVs: 21 Def
+Mild Nature
+IVs: 28 HP / 25 Atk / 28 Def / 30 SpA / 30 SpD / 31 Spe
+- Blizzard
+- Sheer Cold
+- Surf
+- Fire Fang"></textarea>
+          <button id="inventoryImportPasteSubmitBtn" class="primary-btn" type="button">Importar desde PokePaste</button>
+        </div>
+        <div id="inventoryImportPokeMMOPanel" class="inventory-import-modal__panel" role="tabpanel" hidden="">
+          <p>Exportá tu monsters.json desde el juego yendo a<br><b>Configuración &gt; Utilidades &gt; Volcar Recursos Modificables &gt; Marcar Pokémon Poseídos &gt; Sí</b><br>
+          <span style="color:red">Asegurate de desactivar cualquier mod que altere textos antes de exportar, para evitar problemas de compatibilidad.</span></p>
+          <label class="inventory-import-modal__override">
+            <input type="checkbox" id="inventoryImportPokeMMOOverrideChk" checked="">
+            Sobrescribir inventario existente
+          </label>
+          <label for="inventoryPokeMMOSkipOtInput">Excluir OT (separados por coma)</label>
+          <input id="inventoryPokeMMOSkipOtInput" type="text" placeholder="Ejemplo: LordDusk, NotLordDusk">
+          <label class="inventory-import-modal__override">
+            <input type="checkbox" id="inventoryPokeMMOExcludeHatchedChk">
+            Excluir Pokémon nacidos con nivel mayor a 1
+          </label>
+          <label class="inventory-import-modal__override">
+            <input type="checkbox" id="inventoryPokeMMORequireBothFiltersChk">
+            Excluir por OT/Nacido solo si ambos se cumplen (deben coincidir los dos para excluirse)
+          </label>
+          <label class="inventory-import-modal__override">
+            <input type="checkbox" id="inventoryPokeMMOSkipLevel100Chk">
+            Omitir los de nivel 100
+          </label>
+          <button id="inventoryImportPokeMMOOptionBtn" class="primary-btn" type="button">Importar desde PokeMMO</button>
+        </div>
+        <div class="section-actions inventory-import-modal__actions">
+          <button id="inventoryImportCancelBtn" class="ghost-btn" type="button">Cancelar</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel output-panel">
+      <details class="panel-toggle" open="">
+        <summary class="panel-summary">
+          <span class="panel-summary-title"><h2 id="shoppingChecklistTitle">Lista de Compras</h2></span>
+          <div class="panel-summary-actions">
+            <button id="shoppingChecklistToggleBtn" class="ghost-btn" type="button">Cambiar a Lista de Compra</button>
+          </div>
+        </summary>
+        <div class="panel-body">
+          <div class="section-head">
+            <strong id="totalCostOutput">Total Estimado: --</strong>
+          </div>
+
+          <div id="shoppingListView">
+            <div class="section-head">
+              <p class="hint">Estos son todos los Pokémon que necesitás para poder criar todos tus objetivos.</p>
+              <strong id="shoppingListTotal">Total: 0</strong>
+            </div>
+            <div id="shoppingList" class="shopping-list"></div>
+          </div>
+
+          <div id="buyChecklistView" hidden="">
+            <div class="section-head">
+              <p class="hint">Marcá los ítems a medida que los comprás. El presupuesto se actualiza a medida que avanzás.</p>
+              <strong id="buyChecklistProgress">Marcados 0/0</strong>
+            </div>
+            <div class="input-grid buy-checklist-toolbar">
+              <label>
+                Presupuesto
+                <input id="buyChecklistBudgetInput" type="number" min="0" step="1" value="0" placeholder="Ingresá tu presupuesto disponible">
+              </label>
+              <label>
+                Presupuesto Restante
+                <input id="buyChecklistRemaining" type="text" value="0" readonly="">
+              </label>
+              <label>
+                Falta Comprar
+                <input id="buyChecklistOutstanding" type="text" value="0" readonly="">
+              </label>
+            </div>
+            <div class="section-head">
+              <div class="hint buy-checklist-status" id="buyChecklistStatus">Todavía no hay ítems en la lista.</div>
+              <button id="clearBuyChecklistBtn" class="ghost-btn" type="button">Limpiar Marcados</button>
+            </div>
+            <div id="buyChecklistList" class="shopping-list"></div>
+          </div>
+
+          <article id="acquisitionPriorityPanel" class="plan-card plan-card--collapsible">
+            <details class="plan-card-toggle">
+              <summary class="plan-card-summary">Recomendaciones de Compra Prioritaria</summary>
+              <div class="plan-card-body">
+                <p class="hint">Orden de prioridad según el impacto que desbloquea más adelante.</p>
+                <div id="acquisitionPriorityList" class="shopping-list"></div>
+              </div>
+            </details>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section id="itemsNeededPanel" class="panel output-panel">
+      <details class="panel-toggle" open="">
+        <summary class="panel-summary"><h2>Ítems Necesarios</h2></summary>
+        <div class="panel-body">
+          <p class="hint">Esta lista resume todos los ítems equipables necesarios en tus pasos de crianza.</p>
+          <div id="itemNeedsList" class="shopping-list"></div>
+        </div>
+      </details>
+    </section>
+
+    <section id="explainPlanPanel" class="panel output-panel">
+      <details class="panel-toggle" open="">
+        <summary class="panel-summary"><h2>Explicar mi Plan</h2></summary>
+        <div class="panel-body">
+          <p class="hint">Por qué el planificador eligió esta ruta, incluyendo compromisos de costo cuando aplica.</p>
+          <div id="pathAlternatives" class="plan-cards"></div>
+          <div id="planCompare" class="plan-cards">
+            <article class="plan-card plan-card--collapsible">
+              <details class="plan-card-toggle">
+                <summary class="plan-card-summary">Comparar Planes</summary>
+                <div class="plan-card-body">
+                  <div class="input-grid plan-compare-toolbar">
+                    <label>
+                      Perfil Izquierdo
+                      <select id="compareLeftProfile"></select>
+                    </label>
+                    <label>
+                      Perfil Derecho
+                      <select id="compareRightProfile"></select>
+                    </label>
+                  </div>
+                  <div id="planCompareOutput" class="plan-compare-output"></div>
+                </div>
+              </details>
+            </article>
+          </div>
+          <div id="planExplanations" class="plan-cards"></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel graph-panel">
+      <div class="section-head">
+        <div>
+          <h2>Planificador de Nodos</h2>
+        </div>
+        <div class="graph-controls">
+          <select id="graphTargetSelect"></select>
+          <button id="graphCollapseToggle" class="ghost-btn" type="button" aria-expanded="false" aria-controls="graphPanelBody">Expandir</button>
+        </div>
+      </div>
+      <div id="graphPanelBody" class="graph-panel-body is-collapsed">
+        <div id="graph" class="graph"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="settingsBackdrop" class="settings-backdrop" hidden=""></div>
+  <aside id="settingsSidebar" class="settings-sidebar" aria-hidden="true">
+    <div class="settings-sidebar__header">
+      <div>
+        <p class="eyebrow">Configuración del Planificador</p>
+        <h2>Costos y Configuración</h2>
+      </div>
+      <button id="settingsClose" class="ghost-btn" type="button" aria-label="Cerrar panel de configuración">Cerrar</button>
+    </div>
+
+    <button id="themeToggle" class="ghost-btn" type="button" aria-label="Cambiar tema de color">Cambiar a Modo Claro</button>
+
+    <p class="hint">Configurá tus precios de mercado actuales y las opciones de planificación.</p>
+
+    <label class="toggle-row">
+      <span>Activar Soporte 2x31</span>
+      <input id="twoperfectivsSupportInput" type="checkbox">
+    </label>
+    <p class="hint">Desactivado por defecto. Si se activa, el planificador puede comprar un macho donante 2x31 si sale más barato que criarlo.</p>
+
+    <label class="toggle-row">
+      <span>Usar Inventario Propio</span>
+      <input id="inventoryEnabledInput" type="checkbox" checked="">
+    </label>
+    <p class="hint">Activado por defecto. Si se desactiva, se oculta el bloque de inventario y los Pokémon propios se ignoran en la planificación y en los cálculos de compra.</p>
+
+    <h3>Costos de Mercado</h3>
+    <div class="cost-grid settings-cost-grid">
+      <label>
+        Precio del Aparato
+        <input id="costBraceInput" type="number" min="0" step="1" value="10000">
+      </label>
+      <label>
+        Precio de la Piedra Eterna
+        <input id="costEverstoneInput" type="number" min="0" step="1" value="5000">
+      </label>
+    </div>
+
+    <h3>Precios de Machos por Grupo Huevo</h3>
+    <p class="hint">Configurá los precios normales de machos según el grupo huevo.</p>
+    <div id="maleEggGroupCosts" class="cost-grid settings-cost-grid"></div>
+
+    <section id="twoperfectivsPriceSection" class="settings-subsection">
+      <h3>Precios de Machos 2x31 por Grupo Huevo</h3>
+      <p class="hint">Configurá los precios de machos 2x31 por grupo huevo cuando el soporte 2x31 esté activado.</p>
+      <div id="twoperfectivsEggGroupCosts" class="cost-grid settings-cost-grid"></div>
+    </section>
+
+    <div class="section-head settings-footer">
+      <div class="section-actions">
+        <input id="costsImportInput" type="file" accept="application/json,.json" hidden="">
+        <button id="importCostsBtn" class="ghost-btn" type="button">Importar Costos</button>
+        <button id="exportCostsBtn" class="ghost-btn" type="button">Exportar Costos</button>
+      </div>
+      <button id="recalcCostsBtn" class="ghost-btn" type="button">Recalcular Costos</button>
+    </div>
+  </aside>
+
+  <script src="scripts/vendor.js"></script>
+  <script src="scripts/app.js"></script>
+</body></html>

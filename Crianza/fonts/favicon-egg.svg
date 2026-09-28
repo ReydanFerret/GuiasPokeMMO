@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Pokemon egg favicon">
+  <defs>
+    <linearGradient id="eggBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff9ef"/>
+      <stop offset="100%" stop-color="#f4e5cf"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" fill="none"/>
+  <ellipse cx="32" cy="35" rx="20" ry="25" fill="url(#eggBody)" stroke="#8f7657" stroke-width="2"/>
+
+  <circle cx="24" cy="28" r="4.5" fill="#5fbf92"/>
+  <circle cx="39" cy="31" r="4" fill="#66c89a"/>
+  <circle cx="31" cy="42" r="3.5" fill="#57b286"/>
+
+  <ellipse cx="26" cy="21" rx="8" ry="4" fill="#ffffff" fill-opacity="0.45"/>
+</svg>
