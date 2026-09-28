@@ -1,8 +1,9 @@
 const botones = [
-  { nombre: "Red", archivo: "RED_By_Flambeo.html" },
-  { nombre: "Halloween (info 2025)", archivo: "PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html" },
+  { nombre: "Red", archivo: "Red/RED_By_Flambeo.html" },
+  { nombre: "Halloween (info 2025)", archivo: "spookyseason/PokeMMO_Halloween_2025_Event_Terminal_V6_PROGRESO_PERSISTENTE.html" },
   { nombre: "Evs", archivo: "EVs/guia-evs-snowold.html" },
-  { nombre: "Amuletos", archivo: "Amuleto/amuleto.html" }
+  { nombre: "Amuletos", archivo: "Amuleto/amuleto.html" },
+  { nombre: "Crianza simulador", archivo: "Crianza/index.html" }
 ];
 
 function generarNieve() {
