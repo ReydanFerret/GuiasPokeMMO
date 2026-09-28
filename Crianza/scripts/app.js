@@ -53,6 +53,120 @@ function escapeHtml(input) {
     .replaceAll("'", "&#039;");
 }
 
+const STAT_LABELS = {
+  HP: "PS",
+  Atk: "Ataque",
+  Def: "Defensa",
+  SpA: "Ataque especial",
+  SpD: "Defensa especial",
+  Spe: "Velocidad"
+};
+
+const GENDER_LABELS = {
+  Male: "Macho",
+  Female: "Hembra",
+  Any: "Cualquiera",
+  Genderless: "Sin género"
+};
+
+const EGG_GROUP_LABELS = {
+  monster: "Monstruo",
+  water1: "Agua 1",
+  water2: "Agua 2",
+  water3: "Agua 3",
+  bug: "Bicho",
+  flying: "Volador",
+  field: "Terreno",
+  terrain: "Terreno",
+  terreno: "Terreno",
+  chaos: "Caos",
+  caos: "Caos",
+  fairy: "Hada",
+  plant: "Planta",
+  humanoid: "Humanoide",
+  mineral: "Mineral",
+  dragon: "Dragón",
+  amorphous: "Amorfo",
+  ditto: "Ditto",
+  undiscovered: "Indescubierto",
+  genderless: "Sin género",
+  dustox: "Dustox",
+  waterc: "Agua C",
+  waterb: "Agua B",
+  waters: "Agua",
+  noeggs: "Sin grupos",
+  "water a": "Agua A",
+  "water b": "Agua B",
+  "water c": "Agua C",
+  "water 1": "Agua 1",
+  "water 2": "Agua 2",
+  "water 3": "Agua 3",
+  "human-like": "Humanoide",
+  "human like": "Humanoide",
+  "field": "Terreno",
+  "terrain": "Terreno",
+  "terreno": "Terreno",
+  "chaos": "Caos",
+  "caos": "Caos",
+  "fairy": "Hada",
+  "plant": "Planta",
+  "monster": "Monstruo",
+  "bug": "Bicho",
+  "flying": "Volador",
+  "mineral": "Mineral",
+  "dragon": "Dragón",
+  "amorphous": "Amorfo",
+  "undiscovered": "Indescubierto"
+};
+
+function formatStatDisplay(stat) {
+  return STAT_LABELS[stat] || String(stat || "");
+}
+
+function formatStatSetDisplay(statsSet) {
+  return [...(statsSet || [])].map(formatStatDisplay).join(", ");
+}
+
+function formatGenderDisplay(gender) {
+  const raw = String(gender || "");
+  if (!raw) {
+    return "Cualquiera";
+  }
+  const exact = GENDER_LABELS[raw] || GENDER_LABELS[raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase()];
+  if (exact) {
+    return exact;
+  }
+  if (/^male/i.test(raw)) return "Macho";
+  if (/^female/i.test(raw)) return "Hembra";
+  if (/^genderless/i.test(raw)) return "Sin género";
+  if (/^any/i.test(raw)) return "Cualquiera";
+  return raw;
+}
+
+function formatEggGroupDisplay(group) {
+  const raw = String(group || "").trim();
+  if (!raw) {
+    return "Sin grupos";
+  }
+  const normalized = normalize(raw);
+  const mapped = EGG_GROUP_LABELS[normalized];
+  if (mapped) {
+    return mapped;
+  }
+  const direct = EGG_GROUP_LABELS[raw.toLowerCase()];
+  if (direct) {
+    return direct;
+  }
+  return raw;
+}
+
+function formatEggGroupsDisplay(groups) {
+  const list = Array.isArray(groups) ? groups : [];
+  if (list.length === 0) {
+    return "Ninguno";
+  }
+  return list.map((group) => formatEggGroupDisplay(group)).join(" / ");
+}
 
 // -----------------------------------------------------------------------------
 // Búsqueda y sugerencias de especies.
@@ -296,7 +410,7 @@ function hydrateIvChecklist(container = el.ivChecklist) {
     input.value = stat;
 
     const text = document.createElement("span");
-    text.textContent = stat;
+    text.textContent = formatStatDisplay(stat);
 
     label.appendChild(input);
     label.appendChild(text);
@@ -353,14 +467,14 @@ function parseGenderProfile(genderRate) {
 
   return {
     mode: "Mixed",
-    text: `${formatGenderPercent(maleRate)}% male / ${formatGenderPercent(femaleRate)}% female`,
+    text: `${formatGenderPercent(maleRate)}% macho / ${formatGenderPercent(femaleRate)}% hembra`,
     femaleRate,
     maleRate
   };
 }
 
 function renderSpeciesMeta(entry, speciesData) {
-  const groups = speciesData.eggGroups.map((g) => `<span class="tag">${escapeHtml(g)}</span>`).join(" ");
+  const groups = speciesData.eggGroups.map((g) => `<span class="tag">${escapeHtml(formatEggGroupDisplay(g))}</span>`).join(" ");
   const notBreedable = speciesData.eggGroups.includes("Undiscovered");
   const warning = notBreedable
     ? "<div class=\"target-meta\">Atención: el grupo huevo Indescubierto no puede criar en cadenas normales.</div>"
@@ -369,8 +483,8 @@ function renderSpeciesMeta(entry, speciesData) {
   el.speciesMeta.className = "species-meta";
   el.speciesMeta.innerHTML = `
     <div><strong>${escapeHtml(entry.displayName)}</strong></div>
-    <div class="target-meta">Egg Groups: ${groups || "None"}</div>
-    <div class="target-meta">Gender: ${escapeHtml(speciesData.genderProfile.text)}</div>
+    <div class="target-meta">Grupos huevo: ${groups || "Ninguno"}</div>
+    <div class="target-meta">Género: ${escapeHtml(speciesData.genderProfile.text)}</div>
     ${warning}
   `;
 }
@@ -497,7 +611,7 @@ function renderInventoryList() {
   for (const entry of state.inventory) {
     const item = document.createElement("article");
     item.className = "target-item inventory-item";
-    const ivList = [...entry.ivs].join(", ") || "None";
+    const ivList = [...entry.ivs].map((stat) => formatStatDisplay(stat)).join(", ") || "Ninguno";
     const genderIcon = entry.gender === "Male" ? "M" : (entry.gender === "Female" ? "F" : "A");
     const genderClass = entry.gender === "Male"
       ? "inventory-gender-icon--male"
@@ -508,7 +622,7 @@ function renderInventoryList() {
 
     const left = document.createElement("div");
     left.innerHTML = `
-      <span class="inventory-gender-icon ${genderClass}" title="Gender: ${escapeHtml(entry.gender)}">${genderIcon}</span>
+      <span class="inventory-gender-icon ${genderClass}" title="Género: ${escapeHtml(formatGenderDisplay(entry.gender))}">${genderIcon}</span>
       <strong>${escapeHtml(entry.species)} <span class="inventory-count-badge">x${entry.count}</span></strong>
       ${natureLine}
       <div class="target-meta">IVs: ${escapeHtml(ivList)}</div>
@@ -573,16 +687,16 @@ function renderTargets() {
     const item = document.createElement("article");
     item.className = "target-item";
 
-    const ivList = STATS.filter((s) => target.ivs[s] === 31).join(", ") || "None";
+    const ivList = STATS.filter((s) => target.ivs[s] === 31).map((stat) => formatStatDisplay(stat)).join(", ") || "Ninguno";
 
     const left = document.createElement("div");
     left.innerHTML = `
       <strong>${escapeHtml(target.species)}</strong>
       <div class="target-meta">
-        <span class="tag">${escapeHtml(target.eggGroups.join(" / "))}</span>
-        <span class="tag">Nature: ${escapeHtml(target.nature)}</span>
+        <span class="tag">${escapeHtml(formatEggGroupsDisplay(target.eggGroups))}</span>
+        <span class="tag">Naturaleza: ${escapeHtml(target.nature)}</span>
       </div>
-      <div class="target-meta">Species Gender: ${escapeHtml(target.genderProfile.text)}</div>
+      <div class="target-meta">Género de la especie: ${escapeHtml(target.genderProfile.text)}</div>
       <div class="target-meta">IVs: ${escapeHtml(ivList)}</div>
     `;
 
@@ -2025,7 +2139,7 @@ function buildTargetPlan(target, carrierBoost = null, carrierFallback = null) {
   if (target.eggGroups.includes("Undiscovered")) {
     steps.push({
       id: `${target.id}-s${stepSeq++}`,
-      text: "Warning: species is in Undiscovered egg group and cannot follow normal breeding chains.",
+      text: "Advertencia: la especie está en el grupo huevo Indescubierto y no puede seguir cadenas normales de cría.",
       branch: "Prechecks",
       bracesUsed: 0,
       everstoneUsed: 0,
@@ -2036,7 +2150,7 @@ function buildTargetPlan(target, carrierBoost = null, carrierFallback = null) {
   if (carrierGender !== "Female" && target.genderProfile.mode !== "Genderless") {
     steps.push({
       id: `${target.id}-s${stepSeq++}`,
-      text: "Warning: this species cannot be female under normal rules. Final-step carrier fallback was applied.",
+      text: "Advertencia: esta especie no puede ser hembra bajo las reglas normales. Se aplicó un respaldo final del portador.",
       branch: "Prechecks",
       bracesUsed: 0,
       everstoneUsed: 0,
@@ -2100,8 +2214,8 @@ function buildTargetPlan(target, carrierBoost = null, carrierFallback = null) {
     allNodes.push(maleNode, dittoNode);
     const evolutionNote = normalize(carrierFallback.sourceSpecies) === normalize(carrierSpecies)
       ? ""
-      : ` Then evolve the female ${carrierFallback.sourceSpecies} into ${carrierSpecies}.`;
-    const fallbackInstruction = `Step ${stepSeq}: Breed the owned male ${carrierFallback.sourceSpecies} with Ditto to produce a female ${carrierFallback.sourceSpecies}.${evolutionNote}`;
+      : ` Luego evoluciona a la hembra de ${carrierFallback.sourceSpecies} en ${carrierSpecies}.`;
+    const fallbackInstruction = `Paso ${stepSeq}: cruza al macho propio de ${carrierFallback.sourceSpecies} con Ditto para producir una hembra de ${carrierFallback.sourceSpecies}.${evolutionNote}`;
     steps.push({
       id: `${target.id}-s${stepSeq++}`,
       text: fallbackInstruction,
@@ -2542,16 +2656,16 @@ function buildFinalMergeNote(target, breedingContext) {
   if (breedingContext.finalResultGender === "Male" || breedingContext.finalResultGender === "Female") {
     const requiredGender = breedingContext.finalResultGender;
     if (breedingContext.usesFamilyLineCarrier) {
-      return ` Final species lock uses a female ${breedingContext.carrierSpecies} line carrier, then evolves the ${requiredGender.toLowerCase()} offspring into ${target.species}.`;
+      return ` El cierre final usa una línea hembra de ${breedingContext.carrierSpecies}, y luego evoluciona a la descendencia ${requiredGender.toLowerCase() === "male" ? "macho" : "hembra"} en ${target.species}.`;
     }
-    return ` Final species lock step preserves the required ${requiredGender.toLowerCase()} result.`;
+    return ` El cierre final preserva el resultado ${requiredGender.toLowerCase() === "male" ? "macho" : "hembra"} requerido.`;
   }
 
   if (target.genderProfile.mode === "Genderless") {
-    return ` Final species lock stays within the ${getSpeciesLineLabelForSpecies(breedingContext.carrierSpecies || target.species)}.`;
+    return ` El cierre final se mantiene dentro de la línea ${getSpeciesLineLabelForSpecies(breedingContext.carrierSpecies || target.species)}.`;
   }
 
-  return " Final species lock step uses target-species female carrier.";
+  return " El cierre final usa un portador hembra de la especie objetivo.";
 }
 
 function pickBestPair(nodes) {
@@ -2634,11 +2748,11 @@ function braceNameForStat(stat) {
 function buildInstruction({ species, eggGroups, parentA, parentB, child, stepIndex }) {
   const fromA = formatStatSet(parentA.stats);
   const fromB = formatStatSet(parentB.stats);
-  const natureLine = child.nature ? ` Use Everstone path for ${child.nature}.` : "";
+  const natureLine = child.nature ? ` Usa la ruta de Piedra de la Naturaleza para ${child.nature}.` : "";
   const genderLine = buildValidRoleLine(parentA, parentB);
-  const eggLine = ` Must share egg group compatibility (${eggGroups.join(" / ")}).`;
+  const eggLine = ` Deben compartir compatibilidad de grupo huevo (${formatEggGroupsDisplay(eggGroups)}).`;
 
-  return `Step ${stepIndex}: Breed ${species} donor A (${fromA || "no fixed IV"}) with donor B (${fromB || "no fixed IV"}) -> offspring with ${formatStatSet(child.stats) || "no fixed IV"}.${natureLine}${genderLine}${eggLine}`;
+  return `Paso ${stepIndex}: Cruza al donante A de ${species} (${fromA || "sin IV fijo"}) con el donante B (${fromB || "sin IV fijo"}) -> descendencia con ${formatStatSetDisplay(child.stats) || "sin IV fijo"}.${natureLine}${genderLine}${eggLine}`;
 }
 
 function buildValidRoleLine(parentA, parentB) {
@@ -2655,7 +2769,7 @@ function buildValidRoleLine(parentA, parentB) {
     const bLabel = parentB.familyApiName
       ? getSpeciesLineLabelFromFamilyApiName(parentB.familyApiName, parentB.species)
       : getSpeciesLineLabelForSpecies(parentB.species);
-    return ` Parent roles: A = ${aLabel} (${parentA.eggGroupUsed}), B = ${bLabel} (${parentB.eggGroupUsed}).`;
+    return ` Roles parentales: A = ${aLabel} (${parentA.eggGroupUsed}), B = ${bLabel} (${parentB.eggGroupUsed}).`;
   }
 
   const aIsFemale = /^female/i.test(a);
@@ -2664,22 +2778,22 @@ function buildValidRoleLine(parentA, parentB) {
   const bIsMale = /^male/i.test(b);
 
   if (aIsFemale && !bIsFemale) {
-    return ` Parent roles: A = Female (${parentA.eggGroupUsed}), B = Male (${parentB.eggGroupUsed}).`;
+    return ` Roles parentales: A = Hembra (${parentA.eggGroupUsed}), B = Macho (${parentB.eggGroupUsed}).`;
   }
 
   if (bIsFemale && !aIsFemale) {
-    return ` Parent roles: A = Male (${parentA.eggGroupUsed}), B = Female (${parentB.eggGroupUsed}).`;
+    return ` Roles parentales: A = Macho (${parentA.eggGroupUsed}), B = Hembra (${parentB.eggGroupUsed}).`;
   }
 
   if (aIsMale && !bIsMale) {
-    return ` Parent roles: A = Male (${parentA.eggGroupUsed}), B = Female (${parentB.eggGroupUsed}).`;
+    return ` Roles parentales: A = Macho (${parentA.eggGroupUsed}), B = Hembra (${parentB.eggGroupUsed}).`;
   }
 
   if (bIsMale && !aIsMale) {
-    return ` Parent roles: A = Female (${parentA.eggGroupUsed}), B = Male (${parentB.eggGroupUsed}).`;
+    return ` Roles parentales: A = Hembra (${parentA.eggGroupUsed}), B = Macho (${parentB.eggGroupUsed}).`;
   }
 
-  return ` Parent roles: A = Female (${parentA.eggGroupUsed}), B = Male (${parentB.eggGroupUsed}).`;
+  return ` Roles parentales: A = Hembra (${parentA.eggGroupUsed}), B = Macho (${parentB.eggGroupUsed}).`;
 }
 
 
@@ -2772,17 +2886,17 @@ function buildNodePlannerLabel(node) {
   if (node.kind === "final") {
     lines.push(`${roleLabel}`);
   } else if (normalizedGender === "Male" || normalizedGender === "Female") {
-    lines.push(`${normalizedGender} ${roleLabel}`);
+    lines.push(`${formatGenderDisplay(normalizedGender)} ${roleLabel}`);
   } else if (genderlessLineLabel) {
     lines.push(isGenericEggGroupNode ? genderlessLineLabel : `${roleLabel} (${genderlessLineLabel})`);
   } else if (normalize(normalizedGender) && normalize(normalizedGender) === normalize(roleLabel)) {
-    lines.push(`${normalizedGender}`);
+    lines.push(`${formatGenderDisplay(normalizedGender)}`);
   } else {
-    lines.push(`${roleLabel} (${node.genderNeed || "Any"})`);
+    lines.push(`${roleLabel} (${formatGenderDisplay(node.genderNeed || "Any")})`);
   }
 
   if (node.nature) {
-    lines.push(`Nature: ${node.nature}`);
+    lines.push(`Naturaleza: ${node.nature}`);
   }
 
   const ivLine = formatIvLine(node.stats instanceof Set ? node.stats : new Set(node.stats || []));
@@ -2796,7 +2910,7 @@ function buildNodePlannerLabel(node) {
   }
 
   if (node.kind !== "final") {
-    lines.push(`Item: ${node.itemNeeded || "No Item"}`);
+    lines.push(`Ítem: ${node.itemNeeded || "Sin ítem"}`);
   }
   return lines.join("\n");
 }
@@ -2883,7 +2997,7 @@ function hydrateGraphSelect(plans) {
 
 function renderSelectedGraph() {
   if (state.graphCache.size === 0) {
-    renderEmptyGraph("Generate a plan to view the graph.");
+    renderEmptyGraph("Generá un plan para ver el gráfico.");
     return;
   }
 
@@ -2891,7 +3005,7 @@ function renderSelectedGraph() {
 
   if (!selected) {
     setGraphCollapsed(true);
-    renderEmptyGraph("Select a target to open the node planner.");
+    renderEmptyGraph("Seleccioná un objetivo para abrir el planificador de nodos.");
     return;
   }
 
@@ -3462,8 +3576,8 @@ function renderAcquisitionPriorityList(remainingNeeds, costConfig = state.costCo
     const empty = document.createElement("div");
     empty.className = "empty";
     empty.textContent = state.planByTargetId.size > 0
-      ? "No market purchases needed. Inventory already covers all breeders."
-      : "Generate a plan to see buy-first priorities.";
+      ? "No hacen falta compras del mercado. El inventario ya cubre todos los criadores."
+      : "Generá un plan para ver prioridades de compra.";
     el.acquisitionPriorityList.appendChild(empty);
     return;
   }
@@ -3703,17 +3817,17 @@ function buildInventoryCardLines(entry, options = {}) {
     .filter(Boolean);
   const isGenderlessSpecies = entryEggGroups.some((group) => normalize(group) === normalize("Genderless"));
   const speciesLine = isGenderlessSpecies
-    ? `${entry.species || "Unknown"}`.trim()
-    : `${entry.gender || "Any"} ${entry.species}`.trim();
-  lines.push(`Use: ${speciesLine}`);
+    ? `${entry.species || "Desconocido"}`.trim()
+    : `${formatGenderDisplay(entry.gender || "Any")} ${entry.species}`.trim();
+  lines.push(`Usar: ${speciesLine}`);
 
   if (includeTraits && entry.nature && entry.nature !== "Any") {
-    lines.push(`Nature: ${entry.nature}`);
+    lines.push(`Naturaleza: ${entry.nature}`);
   }
 
   const ownedStats = STATS.filter((stat) => entry.ivs && entry.ivs.has(stat));
   if (includeTraits && ownedStats.length > 0) {
-    lines.push(`IVs: ${ownedStats.map((stat) => `${stat} 31`).join(", ")}`);
+    lines.push(`IVs: ${ownedStats.map((stat) => `${formatStatDisplay(stat)} 31`).join(", ")}`);
   }
 
   return lines;
@@ -3726,21 +3840,22 @@ function buildCatchCardLines({ eggGroup, species, need, genderNeed, familyApiNam
   const genderlessLineLabel = isGenderlessNeed
     ? (familyApiName ? getSpeciesLineLabelFromFamilyApiName(familyApiName, species) : getSpeciesLineLabelForSpecies(species))
     : "";
-  const roleLabel = isSpeciesLine ? species : eggGroup;
+  const displayEggGroup = formatEggGroupDisplay(eggGroup || "");
+  const roleLabel = isSpeciesLine ? species : displayEggGroup;
 
   if (genderlessLineLabel) {
     const lines = [genderlessLineLabel];
     if (need.startsWith("Nature:")) {
-      lines.push(`Nature: ${need.replace("Nature:", "")}`);
+      lines.push(`Naturaleza: ${need.replace("Nature:", "")}`);
       return lines;
     }
     if (need.startsWith("IV:")) {
       const stat = need.replace("IV:", "");
-      lines.push(`IV: ${stat} 31`);
+      lines.push(`IV: ${formatStatDisplay(stat)} 31`);
       return lines;
     }
     if (need.startsWith("TwoPerfectIVs:")) {
-      const stats = need.replace("TwoPerfectIVs:", "").split("+").join(", ");
+      const stats = need.replace("TwoPerfectIVs:", "").split("+").map(formatStatDisplay).join(", ");
       lines.push(`2x31: ${stats}`);
       return lines;
     }
@@ -3748,21 +3863,21 @@ function buildCatchCardLines({ eggGroup, species, need, genderNeed, familyApiNam
   }
 
   const sameRoleAndGender = normalize(gender || "") && normalize(gender || "") === normalize(roleLabel || "");
-  const lines = [sameRoleAndGender ? `${gender || roleLabel || "Any"}`.trim() : `${gender || "Any"} ${roleLabel}`.trim()];
+  const lines = [sameRoleAndGender ? `${formatGenderDisplay(gender || roleLabel || "Any")}`.trim() : `${formatGenderDisplay(gender || "Any")} ${roleLabel}`.trim()];
 
   if (need.startsWith("Nature:")) {
-    lines.push(`Nature: ${need.replace("Nature:", "")}`);
+    lines.push(`Naturaleza: ${need.replace("Nature:", "")}`);
     return lines;
   }
 
   if (need.startsWith("IV:")) {
     const stat = need.replace("IV:", "");
-    lines.push(`IV: ${stat} 31`);
+    lines.push(`IV: ${formatStatDisplay(stat)} 31`);
     return lines;
   }
 
   if (need.startsWith("TwoPerfectIVs:")) {
-    const stats = need.replace("TwoPerfectIVs:", "").split("+").join(", ");
+    const stats = need.replace("TwoPerfectIVs:", "").split("+").map(formatStatDisplay).join(", ");
     lines.push(`2x31: ${stats}`);
     return lines;
   }
@@ -3785,7 +3900,7 @@ function buildNeedGenderIcon(genderNeed) {
     modifier = "any";
   }
 
-  const title = `Gender: ${normalized || "any"}`;
+  const title = `Género: ${formatGenderDisplay(normalized || "Any")}`;
   return `<span class="need-gender-icon need-gender-icon--${modifier}" title="${escapeHtml(title)}">${label}</span>`;
 }
 
@@ -3837,7 +3952,7 @@ function renderItemNeedsList(plans, costConfig = state.costConfig) {
   if (!plans || plans.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "No item requirements yet.";
+    empty.textContent = "Todavía no hay requisitos de ítems.";
     el.itemNeedsList.appendChild(empty);
     return;
   }
@@ -3847,7 +3962,7 @@ function renderItemNeedsList(plans, costConfig = state.costConfig) {
   if (itemCounts.size === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "No held items required for this plan.";
+    empty.textContent = "No hay ítems de apoyo requeridos para este plan.";
     el.itemNeedsList.appendChild(empty);
     return;
   }
@@ -3861,7 +3976,7 @@ function renderItemNeedsList(plans, costConfig = state.costConfig) {
     card.className = "shop-item";
     card.innerHTML = `
       <strong>${escapeHtml(itemName)}</strong>
-      <div class="target-meta">Unit Price: ${formatCurrency(unitCost)}</div>
+      <div class="target-meta">Precio unitario: ${formatCurrency(unitCost)}</div>
       <div class="target-meta">Subtotal: ${formatCurrency(subtotal)}</div>
       <div class="shop-item-corner"><strong>x${count}</strong>${iconPath ? `<img class="shop-item-icon" src="${escapeHtml(iconPath)}" alt="">` : ""}</div>
     `;
@@ -3888,14 +4003,14 @@ function renderBuyChecklist(remainingNeeds, plans = [], costConfig = state.costC
   if (rows.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "No checklist items yet.";
+    empty.textContent = "Todavía no hay elementos en la lista de compra.";
     el.buyChecklistList.appendChild(empty);
 
     if (el.buyChecklistProgress) {
-      el.buyChecklistProgress.textContent = "Checked 0/0";
+      el.buyChecklistProgress.textContent = "Marcados 0/0";
     }
     if (el.buyChecklistStatus) {
-      el.buyChecklistStatus.textContent = "Generate a plan to build your checklist.";
+      el.buyChecklistStatus.textContent = "Generá un plan para armar la lista de compra.";
     }
     if (el.buyChecklistRemaining) {
       el.buyChecklistRemaining.value = formatCurrency(budget);
@@ -3941,7 +4056,7 @@ function renderBuyChecklist(remainingNeeds, plans = [], costConfig = state.costC
         <span>
           <strong>${escapeHtml(row.title)}</strong>
           ${row.meta ? `<div class="target-meta">${escapeHtml(row.meta)}</div>` : ""}
-          <div class="target-meta">Unit Price: ${formatCurrency(row.unitCost)}</div>
+          <div class="target-meta">Precio unitario: ${formatCurrency(row.unitCost)}</div>
           <div class="target-meta">Subtotal: ${formatCurrency(row.subtotal)}</div>
         </span>
       </label>
@@ -3951,7 +4066,7 @@ function renderBuyChecklist(remainingNeeds, plans = [], costConfig = state.costC
   }
 
   if (el.buyChecklistProgress) {
-    el.buyChecklistProgress.textContent = `Checked ${checkedCount}/${rows.length}`;
+    el.buyChecklistProgress.textContent = `Marcados ${checkedCount}/${rows.length}`;
   }
 
   const remaining = budget - spent;
@@ -3964,7 +4079,7 @@ function renderBuyChecklist(remainingNeeds, plans = [], costConfig = state.costC
   }
 
   if (el.buyChecklistStatus) {
-    el.buyChecklistStatus.textContent = `Spent ${formatCurrency(spent)} of ${formatCurrency(budget)}.`;
+    el.buyChecklistStatus.textContent = `Gastado ${formatCurrency(spent)} de ${formatCurrency(budget)}.`;
   }
 
   persistBuyChecklist();
@@ -4050,7 +4165,7 @@ function renderPlanExplanations(plans, finalizedAllocation = null, costConfig = 
   if (!plans || plans.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "Generate a plan to see why choices were made.";
+    empty.textContent = "Generá un plan para ver por qué se eligieron estas decisiones.";
     el.planExplanations.appendChild(empty);
     return;
   }
@@ -4079,12 +4194,12 @@ function renderPathAlternatives(plans, finalizedAllocation = null, costConfig = 
 
   el.pathAlternatives.innerHTML = "";
 
-  const { card: wrapper, body: wrapperBody } = createCollapsiblePlanCard("Breeding Path Alternatives", "plan-alternatives-card", false);
+  const { card: wrapper, body: wrapperBody } = createCollapsiblePlanCard("Alternativas de ruta de crianza", "plan-alternatives-card", false);
 
   if (!plans || plans.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "Generate a plan to view alternative route profiles.";
+    empty.textContent = "Generá un plan para ver perfiles alternativos de ruta.";
     wrapperBody.appendChild(empty);
     el.pathAlternatives.appendChild(wrapper);
     return;
@@ -4107,15 +4222,15 @@ function renderPathAlternatives(plans, finalizedAllocation = null, costConfig = 
     list.className = "plan-explain-list";
     for (const profile of profiles) {
       const li = document.createElement("li");
-      const bestBadge = profile.estimatedCost === cheapestCost ? " <span class=\"plan-change-badge plan-change-badge--down\">best cost</span>" : "";
-      li.innerHTML = `<strong>${escapeHtml(profile.name)}</strong>: ${escapeHtml(profile.summary)} (Cost ${escapeHtml(formatCurrency(profile.estimatedCost))}, Steps ${profile.estimatedSteps}, New Purchases ${profile.marketLeaves})${bestBadge}`;
+      const bestBadge = profile.estimatedCost === cheapestCost ? " <span class=\"plan-change-badge plan-change-badge--down\">mejor costo</span>" : "";
+      li.innerHTML = `<strong>${escapeHtml(profile.name)}</strong>: ${escapeHtml(profile.summary)} (Costo ${escapeHtml(formatCurrency(profile.estimatedCost))}, Pasos ${profile.estimatedSteps}, Compras nuevas ${profile.marketLeaves})${bestBadge}`;
       list.appendChild(li);
     }
 
     if (profiles.length === 1) {
       const info = document.createElement("p");
       info.className = "hint";
-      info.textContent = "This is already the lowest-cost route for this target under available modes.";
+      info.textContent = "Esta ya es la ruta más barata para este objetivo con los modos disponibles.";
       group.appendChild(info);
     }
 
@@ -4125,7 +4240,7 @@ function renderPathAlternatives(plans, finalizedAllocation = null, costConfig = 
 
   const note = document.createElement("p");
   note.className = "hint";
-  note.textContent = "Alternatives are planning profiles intended for tradeoff comparison before implementation.";
+  note.textContent = "Las alternativas son perfiles de planificación para comparar costos y rutas antes de implementar.";
   wrapperBody.append(root, note);
   el.pathAlternatives.appendChild(wrapper);
 }
@@ -4152,7 +4267,7 @@ function renderPlanCompare(plans, finalizedAllocation = null, costConfig = state
   if (profiles.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "Generate a plan to compare profile outcomes.";
+    empty.textContent = "Generá un plan para comparar los resultados de los perfiles.";
     el.planCompareOutput.appendChild(empty);
     return;
   }
@@ -4164,7 +4279,7 @@ function renderPlanCompare(plans, finalizedAllocation = null, costConfig = state
 
     const note = document.createElement("div");
     note.className = "empty";
-    note.textContent = "Only one executable mode is available for this setup.";
+    note.textContent = "Solo hay un modo ejecutable disponible para esta configuración.";
 
     const singleCard = buildCompareProfileCard(single, true);
     el.planCompareOutput.append(singleCard, note);
@@ -4187,19 +4302,19 @@ function renderPlanCompare(plans, finalizedAllocation = null, costConfig = state
   const deltaList = document.createElement("ul");
   deltaList.className = "plan-explain-list";
   const deltas = [
-    { label: "Estimated Total", left: leftProfile.estimatedCost, right: rightProfile.estimatedCost, fmt: formatCurrency, lowerIsBetter: true },
-    { label: "Breeding Steps", left: leftProfile.estimatedSteps, right: rightProfile.estimatedSteps, fmt: (value) => String(value), lowerIsBetter: true },
-    { label: "New Purchases", left: leftProfile.marketLeaves, right: rightProfile.marketLeaves, fmt: (value) => String(value), lowerIsBetter: true }
+    { label: "Total estimado", left: leftProfile.estimatedCost, right: rightProfile.estimatedCost, fmt: formatCurrency, lowerIsBetter: true },
+    { label: "Pasos de crianza", left: leftProfile.estimatedSteps, right: rightProfile.estimatedSteps, fmt: (value) => String(value), lowerIsBetter: true },
+    { label: "Compras nuevas", left: leftProfile.marketLeaves, right: rightProfile.marketLeaves, fmt: (value) => String(value), lowerIsBetter: true }
   ];
 
   for (const row of deltas) {
     const diff = row.right - row.left;
-    const direction = diff === 0 ? "even" : (diff > 0 ? "higher" : "lower");
+    const direction = diff === 0 ? "igual" : (diff > 0 ? "mayor" : "menor");
     const winner = diff === 0
-      ? "Tie"
+      ? "empate"
       : ((row.lowerIsBetter ? (diff < 0) : (diff > 0)) ? rightProfile.name : leftProfile.name);
     const li = document.createElement("li");
-    li.textContent = `${row.label}: ${leftProfile.name} ${row.fmt(row.left)} vs ${rightProfile.name} ${row.fmt(row.right)} (${direction} by ${row.fmt(Math.abs(diff))}, winner: ${winner}).`;
+    li.textContent = `${row.label}: ${leftProfile.name} ${row.fmt(row.left)} vs ${rightProfile.name} ${row.fmt(row.right)} (${direction} en ${row.fmt(Math.abs(diff))}, ganador: ${winner}).`;
     deltaList.appendChild(li);
   }
 
@@ -4213,9 +4328,9 @@ function buildGlobalAlternativeProfiles(plans, finalizedAllocation, costConfig) 
 
   const keys = ["current_optimized", "cheapest", "ignore_inventory"];
   const labels = {
-    current_optimized: "Use Inventory (Balanced)",
-    cheapest: "Lowest Cost (Auto)",
-    ignore_inventory: "Ignore Inventory"
+    current_optimized: "Usar inventario (equilibrado)",
+    cheapest: "Menor costo (auto)",
+    ignore_inventory: "Ignorar inventario"
   };
 
   const totalSteps = (plans || []).reduce((sum, plan) => sum + (plan.steps || []).length, 0);
@@ -4231,7 +4346,7 @@ function buildGlobalAlternativeProfiles(plans, finalizedAllocation, costConfig) 
     marketLeaves: finalizedAllocation?.remainingNeeds instanceof Map
       ? [...finalizedAllocation.remainingNeeds.values()].reduce((sum, count) => sum + count, 0)
       : 0,
-    summary: "Uses owned inventory when beneficial while keeping normal planner behavior.",
+    summary: "Usa el inventario propio cuando conviene y mantiene el comportamiento normal del planificador.",
     executable: true,
     executableProfileKey: "current_optimized"
   };
@@ -4244,7 +4359,7 @@ function buildGlobalAlternativeProfiles(plans, finalizedAllocation, costConfig) 
     marketLeaves: state.lastGlobalNeeds instanceof Map
       ? [...state.lastGlobalNeeds.values()].reduce((sum, count) => sum + count, 0)
       : 0,
-    summary: "Treats all breeders as market purchases and ignores owned inventory.",
+    summary: "Trata a todos los criadores como compras del mercado e ignora el inventario propio.",
     executable: true,
     executableProfileKey: "ignore_inventory"
   };
@@ -4258,7 +4373,7 @@ function buildGlobalAlternativeProfiles(plans, finalizedAllocation, costConfig) 
     estimatedCost: cheapestBase.estimatedCost,
     estimatedSteps: cheapestBase.estimatedSteps,
     marketLeaves: cheapestBase.marketLeaves,
-    summary: `Automatically picks the cheaper result between \"${labels.current_optimized}\" and \"${labels.ignore_inventory}\".`,
+    summary: `Elige automáticamente el resultado más barato entre \"${labels.current_optimized}\" y \"${labels.ignore_inventory}\".`,
     executable: true,
     executableProfileKey: cheapestBase.executableProfileKey
   };
@@ -4303,10 +4418,10 @@ function buildCompareProfileCard(profile, showUseAction = false) {
   list.className = "plan-explain-list";
 
   const rows = [
-    profile.summary ? `Mode: ${profile.summary}` : "",
-    `Estimated Total: ${formatCurrency(profile.estimatedCost)}`,
-    `Breeding Steps: ${profile.estimatedSteps}`,
-    `New Purchases: ${profile.marketLeaves}`
+    profile.summary ? `Modo: ${profile.summary}` : "",
+    `Total estimado: ${formatCurrency(profile.estimatedCost)}`,
+    `Pasos de crianza: ${profile.estimatedSteps}`,
+    `Compras nuevas: ${profile.marketLeaves}`
   ].filter(Boolean);
 
   for (const row of rows) {
@@ -4323,7 +4438,7 @@ function buildCompareProfileCard(profile, showUseAction = false) {
     const useBtn = document.createElement("button");
     useBtn.className = "ghost-btn";
     useBtn.type = "button";
-    useBtn.textContent = "Use This";
+    useBtn.textContent = "Usar este";
     useBtn.dataset.useProfile = profile.executableProfileKey || profile.key;
     useBtn.disabled = !profile.executable;
     actionRow.appendChild(useBtn);
@@ -4351,8 +4466,8 @@ function buildAlternativeProfilesForPlan(plan, finalizedAllocation, costConfig) 
 
   const optimized = {
     key: "current_optimized",
-    name: "Use Inventory (Balanced)",
-    summary: "Uses inventory where helpful while preserving normal planner behavior.",
+    name: "Usar inventario (equilibrado)",
+    summary: "Usa el inventario donde ayuda sin dejar de mantener el comportamiento normal del planificador.",
     estimatedCost: baseCost,
     estimatedSteps: stepCount,
     marketLeaves: marketLeavesCount
@@ -4360,8 +4475,8 @@ function buildAlternativeProfilesForPlan(plan, finalizedAllocation, costConfig) 
 
   const ignoreInventory = {
     key: "ignore_inventory",
-    name: "Ignore Inventory",
-    summary: "Forces all breeders to be market-sourced; owned inventory is intentionally ignored.",
+    name: "Ignorar inventario",
+    summary: "Fuerza a que todos los criadores se obtengan del mercado y se ignora el inventario propio.",
     estimatedCost: estimateNeedsCost(plan.baseNeeds, costConfig).total + estimateConsumablesCost(plan, costConfig),
     estimatedSteps: stepCount,
     marketLeaves: Math.max(marketLeavesCount, [...plan.baseNeeds.values()].reduce((sum, count) => sum + count, 0))
@@ -4375,8 +4490,8 @@ function buildAlternativeProfilesForPlan(plan, finalizedAllocation, costConfig) 
   })[0] || optimized;
   const cheapest = {
     key: "cheapest",
-    name: "Lowest Cost (Auto)",
-    summary: "Automatically picks the lower-cost result between balanced and ignore-inventory modes.",
+    name: "Menor costo (auto)",
+    summary: "Elige automáticamente el resultado más barato entre los modos equilibrado e ignorar inventario.",
     estimatedCost: cheapestBase.estimatedCost,
     estimatedSteps: cheapestBase.estimatedSteps,
     marketLeaves: cheapestBase.marketLeaves
@@ -4387,8 +4502,8 @@ function buildAlternativeProfilesForPlan(plan, finalizedAllocation, costConfig) 
 
 function buildPlanExplanationLines(plan, finalizedAllocation, costConfig) {
   const lines = [];
-  const ivSummary = STATS.filter((stat) => plan.target.ivs[stat] === 31).join(", ") || "None";
-  lines.push(`Target IVs: ${ivSummary}.`);
+  const ivSummary = STATS.filter((stat) => plan.target.ivs[stat] === 31).map(formatStatDisplay).join(", ") || "Ninguno";
+  lines.push(`IVs objetivo: ${ivSummary}.`);
 
   const graph = state.graphCache.get(plan.target.id);
   const leafNodes = (graph?.nodes || []).map((node) => node.data).filter((node) => node && node.kind === "leaf");
@@ -4396,16 +4511,16 @@ function buildPlanExplanationLines(plan, finalizedAllocation, costConfig) {
   const marketLeaves = leafNodes.filter((node) => !node.fromInventory);
 
   if (inventoryLeaves.length > 0) {
-    lines.push(`Used ${inventoryLeaves.length} owned breeder${inventoryLeaves.length === 1 ? "" : "s"} to reduce purchases.`);
+    lines.push(`Se usaron ${inventoryLeaves.length} criador${inventoryLeaves.length === 1 ? "" : "es"} propio${inventoryLeaves.length === 1 ? "" : "s"} para reducir compras.`);
   } else {
-    lines.push("No compatible owned breeders were selected, so all donor needs are market-based.");
+    lines.push("No se seleccionaron criadores propios compatibles; todas las necesidades del donante son de mercado.");
   }
 
   const natureNeeds = [...plan.baseNeeds.keys()].filter((key) => parseNeedKey(key).need.startsWith("Nature:"));
   if (plan.target.nature !== "Any") {
     lines.push(natureNeeds.length > 0
-      ? "Nature was inherited through a dedicated nature donor path."
-      : "Nature donor was skipped because the carrier path already satisfied nature requirements.");
+      ? "La naturaleza se heredó por una ruta dedicada de donante de naturaleza."
+      : "La ruta del portador ya cumplía la naturaleza, así que no se usó donante adicional.");
   }
 
   const twoPerfectNeeds = [...plan.baseNeeds.entries()].filter(([key]) => parseNeedKey(key).need.startsWith("TwoPerfectIVs:"));
@@ -4427,28 +4542,28 @@ function buildPlanExplanationLines(plan, finalizedAllocation, costConfig) {
     const delta = totalAlternative - totalChosen;
 
     if (delta > 0) {
-      lines.push(`2x31 donor path saved ${formatCurrency(delta)} versus breeding equivalent two single-IV donors.`);
+      lines.push(`La ruta 2x31 ahorró ${formatCurrency(delta)} frente a criar dos donantes de IV simple equivalentes.`);
     } else if (delta < 0) {
-      lines.push(`2x31 donor path costs ${formatCurrency(Math.abs(delta))} more than breeding two single-IV donors, likely due to inventory or compatibility constraints.`);
+      lines.push(`La ruta 2x31 cuesta ${formatCurrency(Math.abs(delta))} más que criar dos donantes de IV simple, probablemente por compatibilidad o inventario.`);
     } else {
-      lines.push("2x31 donor path is cost-neutral versus breeding two single-IV donors.");
+      lines.push("La ruta 2x31 tiene costo similar a criar dos donantes de IV simple.");
     }
   }
 
   const donorSavings = estimateCheapestDonorSavings(plan, costConfig);
   if (donorSavings) {
-    const direction = donorSavings.delta >= 0 ? "saved" : "costs";
+    const direction = donorSavings.delta >= 0 ? "ahorró" : "cuesta";
     const amount = formatCurrency(Math.abs(donorSavings.delta));
-    lines.push(`Donor egg group choice ${direction} ${amount} per donor (chosen ${donorSavings.chosenGroup} vs next best ${donorSavings.alternativeGroup}).`);
+    lines.push(`La elección del grupo huevo del donante ${direction} ${amount} por donante (elegido ${donorSavings.chosenGroup} frente a ${donorSavings.alternativeGroup}).`);
   }
 
   const breederCost = estimateNeedsCost(plan.baseNeeds, costConfig).total;
   const itemCost = estimateConsumablesCost(plan, costConfig);
-  lines.push(`Estimated target total: ${formatCurrency(breederCost + itemCost)} (${formatCurrency(breederCost)} breeders + ${formatCurrency(itemCost)} items).`);
+  lines.push(`Total estimado del objetivo: ${formatCurrency(breederCost + itemCost)} (${formatCurrency(breederCost)} criadores + ${formatCurrency(itemCost)} ítems).`);
 
   if (finalizedAllocation?.remainingNeeds instanceof Map) {
     const uncovered = marketLeaves.length;
-    lines.push(`${uncovered} leaf breeder step${uncovered === 1 ? " remains" : "s remain"} uncovered by inventory for this target path.`);
+    lines.push(`${uncovered} paso${uncovered === 1 ? "" : "s"} de criador${uncovered === 1 ? "" : "es"} sin cubrir por el inventario para esta ruta.`);
   }
 
   return lines;
@@ -4498,7 +4613,7 @@ function renderPlanCards(plans, costConfig = state.costConfig) {
   if (!plans || plans.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "Generate a plan to see steps.";
+    empty.textContent = "Generá un plan para ver los pasos.";
     el.planCards.appendChild(empty);
     return;
   }
@@ -4507,14 +4622,14 @@ function renderPlanCards(plans, costConfig = state.costConfig) {
     const card = document.createElement("article");
     card.className = "plan-card";
 
-    const ivSummary = STATS.filter((s) => plan.target.ivs[s] === 31).join(", ") || "None";
+    const ivSummary = STATS.filter((s) => plan.target.ivs[s] === 31).map(formatStatDisplay).join(", ") || "Ninguno";
 
     const title = document.createElement("h3");
     title.textContent = `${plan.target.species} (${plan.target.nature})`;
 
     const meta = document.createElement("p");
     meta.className = "hint";
-    meta.textContent = `Egg Groups: ${plan.target.eggGroups.join(" / ")} | Species Gender: ${plan.target.genderProfile.text} | Target IVs: ${ivSummary}`;
+    meta.textContent = `Grupos huevo: ${formatEggGroupsDisplay(plan.target.eggGroups)} | Género de la especie: ${plan.target.genderProfile.text} | IVs objetivo: ${ivSummary}`;
 
     const sections = [
       "Prechecks",
@@ -4542,7 +4657,7 @@ function renderPlanCards(plans, costConfig = state.costConfig) {
       for (const step of sectionSteps) {
         const li = document.createElement("li");
         const stepCost = step.bracesUsed * costConfig.brace + step.everstoneUsed * costConfig.everstone;
-        li.textContent = `${step.text} (Braces: ${step.bracesUsed || 0}, Everstones: ${step.everstoneUsed || 0}, Est. Step Cost: ${formatCurrency(stepCost)})`;
+        li.textContent = `${step.text} (Brazaletes: ${step.bracesUsed || 0}, Piedras de la Naturaleza: ${step.everstoneUsed || 0}, Costo estimado del paso: ${formatCurrency(stepCost)})`;
         list.appendChild(li);
       }
 
@@ -4553,12 +4668,12 @@ function renderPlanCards(plans, costConfig = state.costConfig) {
     const planCost = estimateNeedsCost(plan.baseNeeds, costConfig).total + estimateConsumablesCost(plan, costConfig);
     const costLine = document.createElement("p");
     costLine.className = "hint";
-    costLine.textContent = `Estimated Total Cost: ${formatCurrency(planCost)}`;
+    costLine.textContent = `Costo total estimado: ${formatCurrency(planCost)}`;
 
     if (plan.steps.length === 0) {
       const li = document.createElement("div");
       li.className = "empty";
-      li.textContent = "No breeding chain required for this target.";
+      li.textContent = "No hace falta una cadena de crianza para este objetivo.";
       card.append(title, meta, costLine, li);
     } else {
       card.append(title, meta, costLine, sectionRoot);
@@ -4934,7 +5049,7 @@ function hasOwnedEntryForEggGroup(eggGroup, allowedGenders) {
 }
 
 function renderTotalCostSummary(total, needsCost, consumableCost) {
-  el.totalCostOutput.textContent = `Estimated Total: ${formatCurrency(total)} (Breeders: ${formatCurrency(needsCost)} + Items: ${formatCurrency(consumableCost)})`;
+  el.totalCostOutput.textContent = `Total estimado: ${formatCurrency(total)} (Criadores: ${formatCurrency(needsCost)} + Ítems: ${formatCurrency(consumableCost)})`;
 }
 
 
@@ -4972,13 +5087,13 @@ const DEFAULT_MALE_EGG_GROUPS = [
   "Water A",
   "Bug",
   "Flying",
-  "Field",
+  "Terreno",
   "Fairy",
   "Plant",
   "Humanoid",
   "Water C",
   "Mineral",
-  "Chaos",
+  "Caos",
   "Water B",
   "Dragon"
 ];
@@ -5141,11 +5256,14 @@ function normalizeEggGroupToken(rawGroup) {
   const map = {
     "bug": "Bug",
     "cannot breed": "Undiscovered",
-    "chaos": "Chaos",
+    "chaos": "Caos",
+    "caos": "Caos",
     "ditto": "Ditto",
     "dragon": "Dragon",
     "fairy": "Fairy",
-    "field": "Field",
+    "field": "Terreno",
+    "terrain": "Terreno",
+    "terreno": "Terreno",
     "flying": "Flying",
     "genderless": "Genderless",
     "humanoid": "Humanoid",
